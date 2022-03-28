@@ -5,48 +5,73 @@ import java.util.TimerTask;
 
 import javax.security.auth.login.LoginException;
 
+import com.sun.net.httpserver.HttpServer;
+
+import discord_bot.HttpSrv.MyHandler;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.util.Scanner;
 
-public class Main {
+public class Main {																		// Main Class
 
-	public static JDA jda;
+	public static JDA jda;																// Bot
 	
-	public static String[] messages = {"being the best", "made by Nenad", "beating others", "having some bitches..."};
-	public static int currentIndex = 0;
+	public static String[] messages = 
+		{
+			"with your mom", 
+			"a guitar", 
+			"idk", 
+			"with some bitches..."
+		};																				// Statusne poruke
+	public static int currentIndex = 0;													// Index poruke
 	
-	public static void main(String[] args) throws LoginException, InterruptedException, FileNotFoundException {
+	public static void main(String[] args) throws LoginException, 
+									InterruptedException, IOException {					// Main funkcija
+	
+		// -- Vadjenja tokena --
+		
+		File token_fajl = new File("token.txt");										// Fajl za token, gde se cuva
+    	Scanner tR = new Scanner(token_fajl);											// Scanner za token
 
-    File token_fajl = new File("token.txt");
-    Scanner tR = new Scanner(token_fajl);
-
-    String token = tR.nextLine();
-
-    tR.close();
+    	String token = tR.nextLine();													// Uzimamo token iz fajla
+    	
+    	tR.close();																		// Zavrsavamo, izlaz iz fajla
+    	
+    	// -- Instanciranje objekta -- 
+	
+		jda = JDABuilder.createDefault(token).build();									// Instanciranje JDA objekta, sa tokenom
 		
-		jda = JDABuilder.createDefault(token).build();
+		// -- Aktivnost, status, onlineStatus --
 		
-		//Run this once
-		new Timer().schedule(new TimerTask(){
-		  public void run(){
-		    jda.getPresence().setActivity(Activity.playing(messages[currentIndex]));
-		    currentIndex=(currentIndex+1)%messages.length;
-		  }},0,30_000);
+		new Timer().schedule(new TimerTask(){											// Timer za menjanje statusne poruke
+		  public void run(){															// Funkcija za rad, async
+		    jda.getPresence().setActivity(Activity.playing(messages[currentIndex]));	// Menjanje statusa na osnovu indexa
+		    currentIndex=(currentIndex+1)%messages.length;								// Povecavanje indexa
+		  }},0,30_000);																	// Svakih 30 sekundi
 		
-		jda.getPresence().setStatus(OnlineStatus.IDLE);
+		jda.getPresence().setStatus(OnlineStatus.IDLE);									// OnlineStatus stavljamo na IDLE
 		
-		jda.addEventListener(new Commands());
-		jda.addEventListener(new JoinEvent());
+		// -- Listeneri --
 		
-		jda.awaitReady();
+		jda.addEventListener(new Commands());											// Dodavanje event listenera
+		jda.addEventListener(new OtherEvents());										// Klase Commands i JoinEvent
 		
-		jda.setAutoReconnect(true);
+		jda.awaitReady();																// Cekamo pocetak
+		
+		jda.setAutoReconnect(true);														// U slucaju diskonekta, ponovo se ukljuci
+		
+		// -- Odrzavanje bota aktivnim --
+		
+		HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);			// Aktiviramo server na portu 8
+        server.createContext("/test", new MyHandler());									// Pravi handle za nastavak URL-a, /test
+        server.setExecutor(null); 														// Executor stavljamo na nista
+        server.start();																	// Pocinjemo server
 
 	}
 }
