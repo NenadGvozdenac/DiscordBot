@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.Activity;
 public class Main {
 
 	public static JDA jda;
-	public static String token = "NzA2NDgyNDc0MjAwMzM0MzY2.Xq65Ew.v_1pTh9GZB9MexWwUx4saq9vD1E";
+	public static String token = "NzA2NDgyNDc0MjAwMzM0MzY2.Xq65Ew.0Ty0qSeTbDNo_A435x0jdFPIVqQ";
 	
 	public static String[] messages = {"being the best", "made by Nenad", "beating others", "having some bitches..."};
 	public static int currentIndex = 0;

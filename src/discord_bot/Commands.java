@@ -37,8 +37,8 @@ public class Commands extends ListenerAdapter {
 		List<String> triggeri = new ArrayList<String>();
 		List<String> poruke = new ArrayList<String>();
 		
-		File triggers = new File("C:\\Projects\\TinaBot\\DiscordBot\\src\\discord_bot\\triggeri.txt");
-		File messages = new File("C:\\Projects\\TinaBot\\DiscordBot\\src\\discord_bot\\poruke.txt");
+		File triggers = new File("triggeri.txt");
+		File messages = new File("poruke.txt");
 		
 		try {
 			Scanner tR = new Scanner(triggers);
@@ -232,7 +232,7 @@ public class Commands extends ListenerAdapter {
 		break;
 		
 		case prefix + "purge":
-			if(autor.hasPermission(Permission.MESSAGE_MANAGE)) {
+			//if(autor.hasPermission(Permission.MESSAGE_MANAGE)) {
 				if(args.length != 2) {
 					event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 					break;
@@ -248,7 +248,7 @@ public class Commands extends ListenerAdapter {
 		        	event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 		        	break;
 		        }
-			}
+			//}
 		break;
 		
 		case prefix + "bot_invite":

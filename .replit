@@ -1,0 +1,2 @@
+language = "java"
+run = "cd src && cd discord_bot && javac -cp \".:JDA.jar\" Main.java JoinEvent.java Commands.java && cd .. && java -cp \".:JDA.jar\" discord_bot.Main && cd .."
