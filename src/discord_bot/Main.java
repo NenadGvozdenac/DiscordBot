@@ -10,15 +10,25 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 public class Main {
 
 	public static JDA jda;
-	public static String token = "NzA2NDgyNDc0MjAwMzM0MzY2.Xq65Ew.0Ty0qSeTbDNo_A435x0jdFPIVqQ";
 	
 	public static String[] messages = {"being the best", "made by Nenad", "beating others", "having some bitches..."};
 	public static int currentIndex = 0;
 	
-	public static void main(String[] args) throws LoginException, InterruptedException {
+	public static void main(String[] args) throws LoginException, InterruptedException, FileNotFoundException {
+
+    File token_fajl = new File("token.txt");
+    Scanner tR = new Scanner(token_fajl);
+
+    String token = tR.nextLine();
+
+    tR.close();
 		
 		jda = JDABuilder.createDefault(token).build();
 		
