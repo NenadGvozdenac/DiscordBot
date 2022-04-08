@@ -1,12 +1,17 @@
 package discord_bot;
 
+import java.awt.Color;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,6 +23,8 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 public class Commands extends ListenerAdapter {
 	
 	final static String prefix = "!";
+	
+	public static List<TextChannel> kanali;
 
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
@@ -31,137 +38,268 @@ public class Commands extends ListenerAdapter {
 					+ event.getMessage().getAuthor().getAsTag() + " -> "
 					+ event.getMessage().getContentRaw());
 		}
-		
-		komande(event);
-
-		List<String> triggeri = new ArrayList<String>();
-		List<String> poruke = new ArrayList<String>();
-		
-		File triggers = new File("triggeri.txt");
-		File messages = new File("poruke.txt");
-		
-		try {
-			Scanner tR = new Scanner(triggers);
-			Scanner mR = new Scanner(messages);
+		if(poruka.length() < 1)	return;
+		else if(poruka.charAt(0) == prefix.charAt(0)) {
+			POSALJI_KOMANDE(event);
+		} else {
+			List<String> triggeri = new ArrayList<String>();
+			List<String> poruke = new ArrayList<String>();
 			
-			 while (tR.hasNextLine()) {
-			    String data = tR.nextLine();
-			    triggeri.add(data);
-			 }
-			 
-			 while(mR.hasNextLine()) {
-				 String data = mR.nextLine();
-				 poruke.add(data);
-			 }
-			 
-			 tR.close();
-			 mR.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		for(int i = 0; i < triggeri.size(); i++) {
-			if(poruka.toLowerCase().contains(triggeri.get(i))) {
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage(poruke.get(i)).
-					queue();
+			File triggers = new File("triggeri.txt");
+			File messages = new File("poruke.txt");
+			
+			try {
+				Scanner tR = new Scanner(triggers);
+				Scanner mR = new Scanner(messages);
 				
-				break;
+				 while (tR.hasNextLine()) {
+				    String data = tR.nextLine();
+				    triggeri.add(data);
+				 }
+				 
+				 while(mR.hasNextLine()) {
+					 String data = mR.nextLine();
+					 poruke.add(data);
+				 }
+				 
+				 tR.close();
+				 mR.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			for(int i = 0; i < triggeri.size(); i++) {
+				if(poruka.toLowerCase().contains(triggeri.get(i))) {
+					event.getChannel().sendTyping().queue();
+					event.getChannel().sendMessage(poruke.get(i)).
+						queue();
+					
+					return;
+				}
 			}
 		}
+		
 	}
 	
-	public void komande(MessageReceivedEvent event) {
+	public void POSALJI_KOMANDE(MessageReceivedEvent event) {
 		
-		String[] args = event.getMessage().getContentRaw().split(" ");
-		Member autor = event.getMember();
+		String[] niz_reci = event.getMessage().getContentRaw().split(" ");
 		
-		switch(args[0].toLowerCase()) {
+		TextChannel admin_logovi = null;
+		
+		kanali = event.getGuild().getTextChannels();
+        
+        for(TextChannel c : kanali) {
+        	if(c.getName().equalsIgnoreCase(OtherEvents.admin_kanal)) {
+        		admin_logovi = c;
+        	}
+        }
+		
+        // SWITCH CASE- ZA KOMANDE
+        
+		switch(niz_reci[0].toLowerCase()) {
 		case prefix + "info":
-			event.getMessage().addReaction("✅").queue();
-			event.getChannel().sendTyping().queue();
-			event.getChannel().sendMessage("Informacije o botu: \n"
-					+ "- Discord Bot se koristi samo za zajebanciju...\n"
-					+ "- Discord Bot ne prikuplja informacije o korisnicima Discord servera\n"
-					+ "- Discord Bot je napravljen od strane Nenada Gvozdenca").queue();
+			INFO_KOMANDA(event, niz_reci);
 		break;
 		
 		case prefix + "help":
-			event.getMessage().addReaction("✅").queue();
-			event.getChannel().sendTyping().queue();
-			event.getChannel().sendMessage("Informacije o komandama bota: \n"
-					+ "**" + prefix + "info**\t--> Pokazuje sve informacije o botu\n"
-					+ "**" + prefix + "help**\t--> Pokazuje sve komande bota\n"
-					+ "**" + prefix + "nick @user**\t--> Menja nickname korisniku\n"
-					+ "**" + prefix + "kick @user (ADMIN)**\t--> Izbacivanje korisnika\n"
-					+ "**" + prefix + "shutdown (ADMIN)**\t--> Iskljucuje bota\n"
-					+ "**" + prefix + "purge <broj> (ADMIN)**\t--> Masivno brisanje poruka\n"
-					+ "**" + prefix + "bot_invite**\t--> Invite-ovanje bota u vas server\n"
-					+ "Bot je u mogucnosti raditi jos stvari, kao sto su: slanje poruka za dobrodoslicu novih ljudi, slanje logova nakon akcija moderatora, itd.\n"
-					).queue();
-			
-			if(event.getGuild().getName().toLowerCase().equals("genggengv2")) {
-				String poruka = "**" + "customWords** \t--> Specijalno za GangGang, reci: ";
-				List<String> triggeri = new ArrayList<String>();
-				
-				File fajl = new File("C:\\Projects\\TinaBot\\DiscordBot\\src\\discord_bot\\triggeri.txt");
-				try {
-					Scanner myReader = new Scanner(fajl);
-					
-					 while (myReader.hasNextLine()) {
-					        String data = myReader.nextLine();
-					        triggeri.add(data);
-					      }
-					 
-					 myReader.close();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				}
-				
-				for(String s : triggeri) {
-					String temp = s + "; ";
-					poruka += temp;
-				}
-				
-				event.getChannel().sendMessage(poruka).queue();
-				
-			}
+			HELP_KOMANDA(event, niz_reci);
+			// POSALJI_LOG(admin_logovi, event, event.getMember());
+		break;
+		
+		case prefix + "korisni_linkovi":
+			KORISNI_LINKOVI_KOMANDA(event, niz_reci);
 		break;
 		
 		case prefix + "s":
 		case prefix + "shutdown":
-			if(event.getMember().hasPermission(Permission.ADMINISTRATOR)) {
-				event.getMessage().addReaction("✅").queue();
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Iskljucivanje bota...").queue();
-				Main.jda.shutdownNow();
-				System.exit(0);
-			} else {
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue();
-			}
+			SHUTDOWN_KOMANDA(event, niz_reci);
 		break;
 		
 		case prefix + "nick":
-			if(autor.hasPermission(Permission.NICKNAME_CHANGE)) {
-				event.getMessage().addReaction("✅").queue();
+			NICK_KOMANDA(event, niz_reci, event.getMember());
+			POSALJI_LOG(admin_logovi, event, event.getMember());
+		break;
+		
+		case prefix + "kick":
+			// KICK_KOMANDA(event, args);								// NAPRAVITI!!!!
+			// POSALJI_LOG(admin_logovi, event, event.getMember());
+		break;
+		
+		case prefix + "ping": 
+			PING_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "purge":
+			if(PURGE_KOMANDA(event, niz_reci)) {
+				POSALJI_LOG(admin_logovi, event, event.getMember());
+			}
+		break;
+		
+		case prefix + "bot_invite":
+			BOT_INVITE_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "create_admin_logs":
+			CREATE_ADMIN_LOGS_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "create_welcome":
+			CREATE_WELCOME_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "roast":
+			ROAST_KOMANDA(event, niz_reci);
+		break;
+		}
+	}
+	
+	public static void POSALJI_LOG(TextChannel admin_logovi, MessageReceivedEvent event, Member autor) {
+		if(admin_logovi == null) {
+			return;
+		}
+		
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
+		LocalDateTime now = LocalDateTime.now();  
+		
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle("Koriscenje komande");
+		eb.setDescription("Korisnik: " + autor.getAsMention());
+		eb.addField("KOMANDA", event.getMessage().getContentRaw(), false);
+		eb.addField("VREME", dtf.format(now), false);
+		
+		eb.setColor(Color.MAGENTA);
+		
+		eb.setThumbnail("https://emojipedia-us.s3.amazonaws.com/source/skype/289/double-exclamation-mark_203c-fe0f.png");
+		
+		admin_logovi.sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void INFO_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setTitle("**INFORMACIJE O BOTU**");
+		eb.setColor(Color.CYAN);
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		
+		eb.addField("Namena", "- Discord Bot se koristi samo za zajebanciju...", false);
+		eb.addField("Prikupljanje informacije", "- Discord Bot ne prikuplja informacije o korisnicima Discord servera", false);
+		eb.addField("Kreator", "- Discord Bot je napravljen od strane Nenada Gvozdenca", false);
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		event.getMessage().addReaction("✅").queue();
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void HELP_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setTitle("**KOMANDE BOTA**");
+		eb.setColor(Color.CYAN);
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		
+		eb.addField(prefix + "info", 					"- Pokazuje sve informacije o botu", false);
+		eb.addField(prefix + "help", 					"- Pokazuje sve komande bota", false);
+		eb.addField(prefix + "nick @user <nickname>", 	"- Menja nickname korisniku", false);
+		eb.addField(prefix + "kick @user <razlog>", 	"- Izbacivanje korisnika, **ADMIN**", false);
+		eb.addField(prefix + "purge <broj>",			"- Masivno brisanje poruka, **ADMIN**", false);
+		eb.addField(prefix + "bot_invite",				"- Invite-ovanje bota u vas server", false);
+		eb.addField(prefix + "korisni_linkovi",			"- Korisni linkovi za E2", false);
+		eb.addField(prefix + "create_welcome",			"- Pravljenje dobrodoslice kanala", false);
+		eb.addField(prefix + "create_admin_logs",		"- Pravljenje kanala za admine", false);
+    eb.addField(prefix + "roast <osoba1>...<osobaN>", "- Roastovanje navedenih osoba (ili sebe)", false);
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		if(event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			String specijalne_reci = "";
+			List<String> triggeri = new ArrayList<String>();
+			
+			File fajl = new File("triggeri.txt");
+			try {
+				Scanner myReader = new Scanner(fajl);
+				
+				 while (myReader.hasNextLine()) {
+				        String data = myReader.nextLine();
+				        triggeri.add(data);
+				      }
+				 
+				 myReader.close();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			
+			for(String s : triggeri) {
+				String temp = s + "; ";
+				specijalne_reci += temp;
+			}
+			eb.addField("Specijalne reci za genggengv2", specijalne_reci, false);
+		}
+		
+		event.getMessage().addReaction("✅").queue();
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void KORISNI_LINKOVI_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		event.getMessage().addReaction("✅").queue();
+		
+		eb.setTitle("LINKOVI ZA E2");
+		eb.setColor(Color.CYAN);
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		
+		eb.addField("Dropbox Survival", 				"http://bit.ly/E2surv", false);
+		eb.addField("Studenski web servis", 			"https://ssluzba.ftn.uns.ac.rs/ssluzbasp/", false);
+		eb.addField("Matematička Analiza 1", 			"https://manaliza1.wordpress.com/", false);
+		eb.addField("Algebra", 							"http://imft.ftn.uns.ac.rs/~rade/elektro_diskretna_e2.html", false);
+		eb.addField("PJiSP Vezbe", 						"https://github.com/randomCharacter/PJISP", false);
+		eb.addField("Repozitorijum",					"http://www.acs.uns.ac.rs/sr/repozitorijum", false);
+		eb.addField("Engleski jezik",					"http://branalicen.wix.com/engleski-obavestenja", false);
+		eb.addField("OET",								"http://www.ktet.ftn.uns.ac.rs/index.php?option=com_content&task=view&id=31&Itemid", false);
+		eb.addField("Fizika",							"http://www.ftn.uns.ac.rs/1321325633/racunarstvo-i-automatika", false);
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void SHUTDOWN_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		if(event.getAuthor().getAsTag().equals("NenadG#0001")){
+			event.getMessage().addReaction("✅").queue();
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage("Iskljucivanje bota...").queue();
+			Main.jda.shutdownNow();
+			System.exit(0);
+		} else {
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue();
+		}
+	}
+	
+	public static void NICK_KOMANDA(MessageReceivedEvent event, String[] poruka, Member autor) {
+		try {
+			  if(autor.hasPermission(Permission.NICKNAME_CHANGE)) {
 				event.getChannel().sendTyping().queue();
 				event.getChannel().sendMessage("Menjanje nickname-a...").queue(m -> m.delete().queueAfter(2, TimeUnit.SECONDS));
 				
 				Boolean reset = false;
 				
-				if(args.length == 2) {
+				if(poruka.length == 2) {
 					event.getChannel().sendTyping().queue();
 					event.getChannel().sendMessage("Resetovanje nickname-a gotovo.").queue(m -> m.delete().queueAfter(4, TimeUnit.SECONDS));
 					
 					reset = true;
 				}
 				
-				if(args.length < 2) {
+				if(poruka.length < 2) {
 					event.getChannel().sendTyping().queue();
 					event.getChannel().sendMessage("Losa sintaksa. Koriscenje: " + prefix + "nick @korisnik <nickname>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-					break;
+					return;
 				}
 				
 				List<Member> mentioned = event.getMessage().getMentionedMembers();
@@ -171,91 +309,213 @@ public class Commands extends ListenerAdapter {
 					event.getChannel().sendTyping().queue();
 					event.getChannel().sendMessage("Losa sintaksa, vise od 1 korisnik napisan. Koriscenje: " + prefix + "nick @korisnik <nickname>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 					
-					break;
+					return;
 				}
 				
 				String nick = "";
 				if(reset != true) {
-					if(args.length > 3) {
-						for(int i = 2; i < args.length; i++) {
-							nick = nick + args[i] + " ";
+					if(poruka.length > 3) {
+						for(int i = 2; i < poruka.length; i++) {
+							nick = nick + poruka[i] + " ";
 						}
-					} else if(args.length == 3) nick = args[2];
+					} else if(poruka.length == 3) nick = poruka[2];
 				} 
 				
 				for(Member m : mentioned) {
 					m.modifyNickname(nick).queue();
 				}
-				
+					event.getMessage().addReaction("✅").queue();
+					return;
 			} else {
-				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-			}
-		break;
-		
-		case prefix + "kick":
-			
-			if(event.getAuthor().isBot())	break;
-		
-			if(event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
-				
-				String s = "";
-				
-				if(args.length == 3)
-					s = args[2];
-				else if(args.length > 3)
-					for(int i = 2; i < args.length; i++)
-						s = s + args[i] + " ";
-				else if(args.length < 3) {
-					event.getChannel().sendMessage("Losa sintaksa. Koriscenje: " + prefix + "kick @korisnik <razlog>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-					break;
-				}
-				
-				List<Member> member = event.getMessage().getMentionedMembers();
-				
-				if(member.size() > 1) {
-					event.getChannel().sendMessage("Pogresna sintaksa, vise od 1 korisnik selektovan.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-					break;
-				}
-				
-				TextChannel k = (TextChannel) event.getGuild().getGuildChannelById(ChannelType.TEXT, 893170494642225162l);
-				k.sendMessage("Kickovan korisnik **" + args[1] + "**. Razlog: **" + s + "**.").queue();
-				event.getChannel().sendMessage("Radnja izvrsena ✅").queue();
+				throw new net.dv8tion.jda.api.exceptions.HierarchyException("#27836");
+			}   
 
-				event.getMessage().addReaction("✅").queue();
-				event.getGuild().kick(member.get(0)).queue();
-			}
-		break;
+        } catch(net.dv8tion.jda.api.exceptions.HierarchyException e) {
+      	  		event.getChannel().sendTyping().queue();
+      	  		event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+				event.getMessage().addReaction("❌").queue();
+				
+				return;
+        }
 		
-		case prefix + "ping":
-			event.getChannel().sendMessage("Ping!").queue();
-		break;
+	}
+	
+	
+	public static void KICK_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		if(event.getAuthor().isBot())	return;
 		
-		case prefix + "purge":
-			//if(autor.hasPermission(Permission.MESSAGE_MANAGE)) {
-				if(args.length != 2) {
-					event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-					break;
-				}
+		if(event.getMember().hasPermission(Permission.KICK_MEMBERS)) {
 			
-			 	try{
-		            int brojPoruka = Integer.parseInt(args[1]);
-		            
-		            List<Message> messages = event.getChannel().getHistory().retrievePast(brojPoruka + 1).complete();
-		            event.getTextChannel().deleteMessages(messages).queue();;
-		        }
-		        catch (NumberFormatException ex){
-		        	event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-		        	break;
-		        }
-			//}
-		break;
-		
-		case prefix + "bot_invite":
-			event.getChannel().sendMessage("Mozete invite-ovati bota putem ovog linka: https://discord.com/api/oauth2/authorize?client_id=706482474200334366&permissions=8&scope=bot")
-				.queue(m -> m.addReaction("😊").queueAfter(2, TimeUnit.SECONDS));
-		break;
-		
+			String s = "";
+			
+			if(poruka.length == 3)
+				s = poruka[2];
+			else if(poruka.length > 3)
+				for(int i = 2; i < poruka.length; i++)
+					s = s + poruka[i] + " ";
+			else if(poruka.length < 3) {
+				event.getChannel().sendMessage("Losa sintaksa. Koriscenje: " + prefix + "kick @korisnik <razlog>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+				return;
+			}
+			
+			List<Member> member = event.getMessage().getMentionedMembers();
+			
+			if(member.size() > 1) {
+				event.getChannel().sendMessage("Pogresna sintaksa, vise od 1 korisnik selektovan.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+				return;
+			}
+			
+			TextChannel k = (TextChannel) event.getGuild().getGuildChannelById(ChannelType.TEXT, 893170494642225162l);
+			k.sendMessage("Kickovan korisnik **" + poruka[1] + "**. Razlog: **" + s + "**.").queue();
+			event.getChannel().sendMessage("Radnja izvrsena ✅").queue();
+
+			event.getMessage().addReaction("✅").queue();
+			event.getGuild().kick(member.get(0)).queue();
 		}
+	}
+	
+	
+	public static void PING_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		long start = System.currentTimeMillis();
+		event.getChannel().sendMessage("Pong!").queue();
+		long end = System.currentTimeMillis();
+		event.getChannel().sendMessage("Time:*" + (end - start) + " ms*").queue();
+	}
+	
+	
+	public static Boolean PURGE_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		int brojPoruka = 0;
+	
+		if(poruka.length != 2) {
+			event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+			return false;
+		}
+	
+	 	try{
+            brojPoruka = Integer.parseInt(poruka[1]);
+            
+            List<Message> messages = event.getChannel().getHistory().retrievePast(brojPoruka + 1).complete();
+            event.getTextChannel().deleteMessages(messages).queue();
+            
+            return true;
+        }
+        catch (NumberFormatException ex){
+        	event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+        	return false;
+        }
+	}
+	
+	
+	public static void BOT_INVITE_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		event.getChannel().sendMessage("Mozete invite-ovati bota putem ovog linka: https://discord.com/api/oauth2/authorize?client_id=706482474200334366&permissions=8&scope=bot")
+		.queue(m -> m.addReaction("😊").queueAfter(2, TimeUnit.SECONDS));
+	}
+	
+	
+	public static void CREATE_ADMIN_LOGS_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		if(event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getAuthor().getAsTag().equals("NenadG#0001")) {
+			
+			for(TextChannel channel : kanali) {
+				if(channel.getName().equalsIgnoreCase(OtherEvents.admin_kanal)) {
+					event.getMessage().addReaction("❌").queue();
+					event.getChannel().sendTyping().queue();
+					event.getChannel().sendMessage("Kanal vec postoji!").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+					return;
+				}
+			}
+			
+			event.getMessage().addReaction("✅").queue();
+				
+			EnumSet<Permission> permissions = EnumSet.of(Permission.VIEW_CHANNEL, Permission.MESSAGE_SEND);
+			
+			event.getGuild().createCategory(OtherEvents.admin_kategorija).queue(
+					m -> m.createTextChannel(OtherEvents.admin_kanal)
+					.setTopic("Admin kanal za slanje logova")
+					.setPosition(0)
+					.addPermissionOverride(event.getGuild().getPublicRole(), null, permissions)
+					.queue(
+							n -> n.sendMessage("❗ Kanal napravljen za slanje admin logova.").queueAfter(2, TimeUnit.SECONDS)
+						  )
+				);
+		} else {
+			event.getMessage().addReaction("❌").queue();
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+		}
+	}
+	
+	
+	public static void CREATE_WELCOME_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		if(event.getMember().hasPermission(Permission.ADMINISTRATOR) || event.getAuthor().getAsTag().equals("NenadG#0001")) {
+			
+			for(TextChannel channel : kanali) {
+				if(channel.getName().equalsIgnoreCase(OtherEvents.dobrodoslica_kanal)) {
+					event.getMessage().addReaction("❌").queue();
+					event.getChannel().sendTyping().queue();
+					event.getChannel().sendMessage("Kanal vec postoji!").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+					return;
+				}
+			}
+			
+			event.getMessage().addReaction("✅").queue();
+			
+			EnumSet<Permission> dobrodoslica_permissions = EnumSet.of(Permission.MESSAGE_SEND);
+			
+			event.getGuild().createCategory(OtherEvents.dobrodoslica_kategorija).setPosition(0).queue(
+					m -> m.createTextChannel(OtherEvents.dobrodoslica_kanal)
+					.setTopic("Kanal za slanje toplih poruka dobrodoslice za nove korisnike")
+					.setPosition(0)
+					.addPermissionOverride(event.getGuild().getPublicRole(), null, dobrodoslica_permissions)
+					.queue (
+							n -> n.sendMessage("❗ Kanal napravljen za dobrodoslicu novih ljudi.").queueAfter(2, TimeUnit.SECONDS)
+						   )
+				);
+			
+		} else {
+			event.getMessage().addReaction("❌").queue();
+			event.getChannel().sendTyping().queue();
+			event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+		}
+	}
+	
+	
+	public static void ROAST_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		int brojac = 0;
+		File messages = new File("roasts.txt");
+		List<String> poruke = new ArrayList<String>();
+		
+		try {
+			Scanner mR = new Scanner(messages);
+			 
+			 while(mR.hasNextLine()) {
+				 String data = mR.nextLine();
+				 brojac++;
+				 poruke.add(data);
+			 }
+			 mR.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		Integer random_int = 0 + (int)(Math.random() * ((brojac) + 1));
+		
+		System.out.print(random_int);
+		
+		String poruka_za_slanje = "";
+		
+		if(poruka.length == 1) {
+			poruka_za_slanje = event.getMessage().getAuthor().getAsMention() + ": " + poruke.get(random_int);
+		} else if(poruka.length > 1){
+			List<Member> mentioned = event.getMessage().getMentionedMembers();
+			for(Member m : mentioned) {
+				poruka_za_slanje += m.getAsMention();
+			}
+			
+			poruka_za_slanje += ": " + poruke.get(random_int);
+		}
+		
+		event.getChannel().sendMessage(poruka_za_slanje).queue(m -> m.addReaction("🍀").queueAfter(2, TimeUnit.SECONDS));
 	}
 }
