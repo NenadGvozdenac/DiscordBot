@@ -39,21 +39,8 @@ public class Main {
 									InterruptedException, IOException {					
 	// Main funkcija
 	
-	// -- Vadjenja tokena --
-		
-	File token_fajl = new File("token.txt");										
-    	// Fajl za token, gde se cuva
-    
-   	Scanner tR = new Scanner(token_fajl);											
-    	// Scanner za token
-
-    	String token = tR.nextLine();													
-    	// Uzimamo token iz fajla
-    	
-    	tR.close();	
-    	// Zavrsavamo, izlaz iz fajla
-    	
-    	// -- Instanciranje objekta -- 
+  String token = System.getenv("token");											
+  // Uzimanje tokena iz secret environment variable
 	
 	jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
     	// Instanciranje JDA objekta, sa tokenom

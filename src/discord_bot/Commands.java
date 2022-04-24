@@ -1,8 +1,13 @@
 package discord_bot;
 
 import java.awt.Color;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -40,7 +45,11 @@ public class Commands extends ListenerAdapter {
 		}
 		if(poruka.length() < 1)	return;
 		else if(poruka.charAt(0) == prefix.charAt(0)) {
-			POSALJI_KOMANDE(event);
+			try {
+				POSALJI_KOMANDE(event);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		} else {
 			List<String> triggeri = new ArrayList<String>();
 			List<String> poruke = new ArrayList<String>();
@@ -82,7 +91,7 @@ public class Commands extends ListenerAdapter {
 		
 	}
 	
-	public void POSALJI_KOMANDE(MessageReceivedEvent event) {
+	public void POSALJI_KOMANDE(MessageReceivedEvent event) throws IOException {
 		
 		String[] niz_reci = event.getMessage().getContentRaw().split(" ");
 		
@@ -152,6 +161,18 @@ public class Commands extends ListenerAdapter {
 		case prefix + "roast":
 			ROAST_KOMANDA(event, niz_reci);
 		break;
+		
+		case prefix + "kalendar_ispita":
+			KALENDAR_ISPITA_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "dodaj_respondporuku":
+			DODAJ_RESPONDPORUKU_KOMANDA(event, niz_reci);
+		break;
+		
+		case prefix + "listaj_respondporuke":
+			LISTAJ_RESPONDPORUKE_KOMANDA(event, niz_reci);
+		break;
 		}
 	}
 	
@@ -186,6 +207,7 @@ public class Commands extends ListenerAdapter {
 		eb.addField("Namena", "- Discord Bot se koristi samo za zajebanciju...", false);
 		eb.addField("Prikupljanje informacije", "- Discord Bot ne prikuplja informacije o korisnicima Discord servera", false);
 		eb.addField("Kreator", "- Discord Bot je napravljen od strane Nenada Gvozdenca", false);
+		eb.addField("Github", "- Ceo projekat se nalazi na Github, (https://github.com/NenadGvozdenac/DiscordBot)", false);
 		
 		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
 		
@@ -210,7 +232,8 @@ public class Commands extends ListenerAdapter {
 		eb.addField(prefix + "korisni_linkovi",			"- Korisni linkovi za E2", false);
 		eb.addField(prefix + "create_welcome",			"- Pravljenje dobrodoslice kanala", false);
 		eb.addField(prefix + "create_admin_logs",		"- Pravljenje kanala za admine", false);
-    eb.addField(prefix + "roast <osoba1>...<osobaN>", "- Roastovanje navedenih osoba (ili sebe)", false);
+		eb.addField(prefix + "roast <osoba1>...<osobaN>", "- Roastovanje navedenih osoba (ili sebe)", false);
+		eb.addField(prefix + "kalendar_ispita", 		"- Ispisivanje kalendara svih ispita 2021/2022 godine", false);
 		
 		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
 		
@@ -236,6 +259,10 @@ public class Commands extends ListenerAdapter {
 				String temp = s + "; ";
 				specijalne_reci += temp;
 			}
+			
+			eb.addField("Dodaj poruku na odgovaranje", prefix + "dodaj_respondporuku", false);
+			eb.addField("Listaj poruke za odgovaranje", prefix + "listaj_respondporuke", false);
+			
 			eb.addField("Specijalne reci za genggengv2", specijalne_reci, false);
 		}
 		
@@ -518,4 +545,126 @@ public class Commands extends ListenerAdapter {
 		
 		event.getChannel().sendMessage(poruka_za_slanje).queue(m -> m.addReaction("🍀").queueAfter(2, TimeUnit.SECONDS));
 	}
+	
+	public static void KALENDAR_ISPITA_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setTitle("KALENDAR ISPITA 2021/2022");
+		eb.setColor(Color.CYAN);
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		
+		eb.addField("Osnove Elektrotehnike", "● 1. kolokvijum **-** 7. maj u 11:00", false);
+		eb.addField("Fizika", "● 1. kolokvijum **-** 30. april u 14:30\n● 2. kolokvijum **-** 11. juni u 11:00", false);
+		eb.addField("Arhitektura", "● 1. kolokvijum (T12) **-** 5. april - 8. april\n● 2. kolokvijum (T34, PI1) **-** 3. maj - 6. maj\n● 3. kolokvijum (SOV, PI2) **-** 31. maj - 3. jun", false);
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		eb.addBlankField(true);
+		eb.addField("Raspored svih ispita", "Raspored svih ispita se nalazi na slici ispod.", false);
+		
+		eb.setImage("https://cdn.discordapp.com/attachments/864613055068635136/961591366322888714/unknown.png");
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void DODAJ_RESPONDPORUKU_KOMANDA(MessageReceivedEvent event, String[] poruka) throws IOException {
+		if(!event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			return;
+		}
+		
+		if(poruka.length <= 2) {
+			event.getChannel().sendMessage("Pogresno koriscenje.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+			return;
+		}
+		
+		if(poruka[poruka.length - 1].contains(".png") || poruka[poruka.length - 1].contains(".jpg") || poruka[poruka.length - 1].contains(".gif")) {
+			
+			File triggeri = new File("triggeri.txt");
+			File poruke = new File("poruke.txt");
+			
+			FileWriter wr_triggeri = new FileWriter(triggeri, true);
+			FileWriter wr_poruke = new FileWriter(poruke, true);
+			
+			String trigger = "";
+			
+			for(int i = 1; i < poruka.length - 2; i++) {
+				trigger += poruka[i];
+				trigger += " ";
+			}
+			
+			trigger += poruka[poruka.length - 2];
+			
+			BufferedWriter b = new BufferedWriter(wr_triggeri);
+			PrintWriter p = new PrintWriter(b);
+			p.print("\n" + trigger);
+			
+			b.close();
+			p.close();
+			
+			b = new BufferedWriter(wr_poruke);
+			p = new PrintWriter(b);
+			
+			p.print("\n" + poruka[poruka.length - 1]);
+			
+			b.close();
+			p.close();
+			
+			wr_triggeri.close();
+			wr_poruke.close();
+			
+			event.getMessage().addReaction("✅").queue();
+		} else {
+			event.getChannel().sendMessage("Pogresno koriscenje. Krajnji argument mora imati link do slike.").queue(m -> m.delete().queueAfter(10, TimeUnit.SECONDS));
+			return;
+		}
+	}
+	
+	public static void LISTAJ_RESPONDPORUKE_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		if(!event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			return;
+		}
+		
+		List<String> triggeri = new ArrayList<String>();
+		List<String> poruke = new ArrayList<String>();
+		
+		File triggers = new File("triggeri.txt");
+		File messages = new File("poruke.txt");
+		
+		try {
+			Scanner tR = new Scanner(triggers);
+			Scanner mR = new Scanner(messages);
+			
+			 while (tR.hasNextLine()) {
+			    String data = tR.nextLine();
+			    triggeri.add(data);
+			 }
+			 
+			 while(mR.hasNextLine()) {
+				 String data = mR.nextLine();
+				 poruke.add(data);
+			 }
+			 
+			 tR.close();
+			 mR.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setTitle("**AUTORESPOND PORUKE**");
+		eb.setColor(Color.CYAN);
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		for(int i = 0; i < triggeri.size(); i++) {
+			eb.addField(triggeri.get(i), poruke.get(i), false);
+		}
+		
+		event.getMessage().addReaction("✅").queue();
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+	}
+	
 }
