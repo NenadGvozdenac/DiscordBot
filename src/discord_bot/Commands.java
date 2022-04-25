@@ -14,10 +14,13 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -30,7 +33,9 @@ public class Commands extends ListenerAdapter {
 	final static String prefix = "!";
 	
 	public static List<TextChannel> kanali;
-
+	public static Boolean cooldown = false;
+	public static Integer cooldown_duzina = 20;
+	
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
 		String poruka = event.getMessage().getContentRaw();
@@ -173,6 +178,11 @@ public class Commands extends ListenerAdapter {
 		case prefix + "listaj_respondporuke":
 			LISTAJ_RESPONDPORUKE_KOMANDA(event, niz_reci);
 		break;
+
+	    case prefix + "spamuj":
+	    	SPAMUJ_KOMANDA(event, niz_reci);
+	    	POSALJI_LOG(admin_logovi, event, event.getMember());
+	    break;
 		}
 	}
 	
@@ -185,10 +195,12 @@ public class Commands extends ListenerAdapter {
 		LocalDateTime now = LocalDateTime.now();  
 		
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("Koriscenje komande");
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setTitle("KORISCENJE KOMANDE!");
 		eb.setDescription("Korisnik: " + autor.getAsMention());
 		eb.addField("KOMANDA", event.getMessage().getContentRaw(), false);
-		eb.addField("VREME", dtf.format(now), false);
+		eb.addField("KANAL", event.getChannel().getAsMention(), false);
+		eb.addField("VREME", vreme, false);
 		
 		eb.setColor(Color.MAGENTA);
 		
@@ -202,7 +214,8 @@ public class Commands extends ListenerAdapter {
 		
 		eb.setTitle("**INFORMACIJE O BOTU**");
 		eb.setColor(Color.CYAN);
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
 		
 		eb.addField("Namena", "- Discord Bot se koristi samo za zajebanciju...", false);
 		eb.addField("Prikupljanje informacije", "- Discord Bot ne prikuplja informacije o korisnicima Discord servera", false);
@@ -221,7 +234,8 @@ public class Commands extends ListenerAdapter {
 		
 		eb.setTitle("**KOMANDE BOTA**");
 		eb.setColor(Color.CYAN);
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
 		
 		eb.addField(prefix + "info", 					"- Pokazuje sve informacije o botu", false);
 		eb.addField(prefix + "help", 					"- Pokazuje sve komande bota", false);
@@ -234,6 +248,7 @@ public class Commands extends ListenerAdapter {
 		eb.addField(prefix + "create_admin_logs",		"- Pravljenje kanala za admine", false);
 		eb.addField(prefix + "roast <osoba1>...<osobaN>", "- Roastovanje navedenih osoba (ili sebe)", false);
 		eb.addField(prefix + "kalendar_ispita", 		"- Ispisivanje kalendara svih ispita 2021/2022 godine", false);
+		eb.addField(prefix + "spamuj <poruka> <broj>", 	"- Spamovanje nekih poruka...", false);
 		
 		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
 		
@@ -275,12 +290,13 @@ public class Commands extends ListenerAdapter {
 		EmbedBuilder eb = new EmbedBuilder();
 		
 		event.getMessage().addReaction("✅").queue();
-		
 		eb.setTitle("LINKOVI ZA E2");
 		eb.setColor(Color.CYAN);
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
 		
-		eb.addField("Dropbox Survival", 				"http://bit.ly/E2surv", false);
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
+		
+		eb.addField("Dropbox Survival", 				"https://www.dropbox.com/sh/mkqwwg655ou36n8/AADv4xXVBdRgX63inKrmAegia?dl=0", false);
 		eb.addField("Studenski web servis", 			"https://ssluzba.ftn.uns.ac.rs/ssluzbasp/", false);
 		eb.addField("Matematička Analiza 1", 			"https://manaliza1.wordpress.com/", false);
 		eb.addField("Algebra", 							"http://imft.ftn.uns.ac.rs/~rade/elektro_diskretna_e2.html", false);
@@ -296,7 +312,7 @@ public class Commands extends ListenerAdapter {
 	}
 	
 	public static void SHUTDOWN_KOMANDA(MessageReceivedEvent event, String[] poruka) {
-		if(event.getAuthor().getAsTag().equals("NenadG#0001")){
+		if(event.getAuthor().getAsTag().equals("NenadG#4390")){
 			event.getMessage().addReaction("✅").queue();
 			event.getChannel().sendTyping().queue();
 			event.getChannel().sendMessage("Iskljucivanje bota...").queue();
@@ -312,13 +328,28 @@ public class Commands extends ListenerAdapter {
 		try {
 			  if(autor.hasPermission(Permission.NICKNAME_CHANGE)) {
 				event.getChannel().sendTyping().queue();
-				event.getChannel().sendMessage("Menjanje nickname-a...").queue(m -> m.delete().queueAfter(2, TimeUnit.SECONDS));
+				event.getChannel().sendMessage("Menjanje nickname-a...").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 				
 				Boolean reset = false;
 				
+				int duzina = 0;
+				int space = 0;
+				
+				for(int i = 2; i < poruka.length; i++) {
+					duzina += poruka[i].length();
+					space++;
+				}
+				
+				if(duzina + space > 32) {
+					event.getChannel().sendTyping().queue();
+					event.getChannel().sendMessage("Predugacki nickname! \nGledajte da ne bude duzi od 32 karaktera...").queue(m -> m.delete().queueAfter(6, TimeUnit.SECONDS));
+					
+					return;
+				}
+				
 				if(poruka.length == 2) {
 					event.getChannel().sendTyping().queue();
-					event.getChannel().sendMessage("Resetovanje nickname-a gotovo.").queue(m -> m.delete().queueAfter(4, TimeUnit.SECONDS));
+					event.getChannel().sendMessage("Resetovanje nickname-a gotovo.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 					
 					reset = true;
 				}
@@ -403,10 +434,13 @@ public class Commands extends ListenerAdapter {
 	
 	
 	public static void PING_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+		
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		
 		long start = System.currentTimeMillis();
-		event.getChannel().sendMessage("Pong!").queue();
+		event.getChannel().sendMessage("PING!").queue();
 		long end = System.currentTimeMillis();
-		event.getChannel().sendMessage("Time:*" + (end - start) + " ms*").queue();
+		event.getChannel().sendMessage("Vreme: *" + (end - start) + " ms*").queue();
 	}
 	
 	
@@ -528,8 +562,6 @@ public class Commands extends ListenerAdapter {
 		
 		Integer random_int = 0 + (int)(Math.random() * ((brojac) + 1));
 		
-		System.out.print(random_int);
-		
 		String poruka_za_slanje = "";
 		
 		if(poruka.length == 1) {
@@ -551,7 +583,8 @@ public class Commands extends ListenerAdapter {
 		
 		eb.setTitle("KALENDAR ISPITA 2021/2022");
 		eb.setColor(Color.CYAN);
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
 		
 		eb.addField("Osnove Elektrotehnike", "● 1. kolokvijum **-** 7. maj u 11:00", false);
 		eb.addField("Fizika", "● 1. kolokvijum **-** 30. april u 14:30\n● 2. kolokvijum **-** 11. juni u 11:00", false);
@@ -655,7 +688,8 @@ public class Commands extends ListenerAdapter {
 		
 		eb.setTitle("**AUTORESPOND PORUKE**");
 		eb.setColor(Color.CYAN);
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention());
+		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
+		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
 		
 		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
 		
@@ -666,5 +700,65 @@ public class Commands extends ListenerAdapter {
 		event.getMessage().addReaction("✅").queue();
 		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
+
+	public static void SPAMUJ_KOMANDA(MessageReceivedEvent event, String[] poruka) {
+	
+		if(cooldown == true) {
+			event.getChannel().sendMessage("Komanda trenutno ne radi. Trenutan cooldown: " + cooldown_duzina + "s").queue(m -> m.delete().queueAfter(10, TimeUnit.SECONDS));
+			event.getMessage().addReaction("❌").queue();
+			return;
+		} else {
+			int broj_poruka;
+			
+			try {
+				broj_poruka = Integer.parseInt(poruka[poruka.length - 1]);
+			} catch(java.lang.NumberFormatException e) {
+				event.getChannel().sendMessage("Pogresno koriscenje. Krajnji argument mora biti broj.").queue(m -> m.delete().queueAfter(10, TimeUnit.SECONDS));
+				event.getMessage().addReaction("❌").queue();
+				return;
+			}
+	
+		    if(broj_poruka > 30) {
+		      broj_poruka = 30;
+		    }
+	
+			String poruka_za_slanje = "";
+			
+			for(int i = 1; i < poruka.length - 2; i++) {
+				poruka_za_slanje += poruka[i];
+				poruka_za_slanje += " ";
+			}
+			
+			List<Member> mentioned = event.getMessage().getMentionedMembers();
+			
+			if(!mentioned.isEmpty()) {
+				broj_poruka = 3;
+			}
+			
+			poruka_za_slanje += poruka[poruka.length - 2];
+	    
+			for(int i = 0; i < broj_poruka; i++) {
+				event.getChannel().sendMessage(poruka_za_slanje).queue(m -> m.delete().queueAfter(15, TimeUnit.SECONDS));
+			}
+			
+			event.getMessage().delete().queue();
+			
+			ZAVRSI_COOLDOWN(cooldown_duzina);
+		}
+	    
+	  }
+	
+	public static void ZAVRSI_COOLDOWN(Integer cooldown_duzina) {
+		
+		cooldown = true;
+		
+		new Timer().schedule(new TimerTask() {	
+			public void run() {	
+			    cooldown = false;
+			    
+			    this.cancel();
+			    return;
+			}},cooldown_duzina * 1000, 2394832480L);	
+		}
 	
 }
