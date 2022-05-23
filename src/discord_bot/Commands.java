@@ -7,20 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Scanner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -33,8 +27,7 @@ public class Commands extends ListenerAdapter {
 	final static String prefix = "!";
 	
 	public static List<TextChannel> kanali;
-	public static Boolean cooldown = false;
-	public static Integer cooldown_duzina = 20;
+	public static String kreator = "NenadG#0001";
 	
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
@@ -48,6 +41,7 @@ public class Commands extends ListenerAdapter {
 					+ event.getMessage().getAuthor().getAsTag() + " -> "
 					+ event.getMessage().getContentRaw());
 		}
+		
 		if(poruka.length() < 1)	return;
 		else if(poruka.charAt(0) == prefix.charAt(0)) {
 			try {
@@ -56,6 +50,7 @@ public class Commands extends ListenerAdapter {
 				e.printStackTrace();
 			}
 		} else {
+      
 			List<String> triggeri = new ArrayList<String>();
 			List<String> poruke = new ArrayList<String>();
 			
@@ -85,10 +80,14 @@ public class Commands extends ListenerAdapter {
 			
 			for(int i = 0; i < triggeri.size(); i++) {
 				if(poruka.toLowerCase().contains(triggeri.get(i))) {
+			        if(Cooldowns.cooldown_respond == true) {
+			          return;
+			        }
 					event.getChannel().sendTyping().queue();
-					event.getChannel().sendMessage(poruke.get(i)).
-						queue();
-					
+					event.getChannel().sendMessage(poruke.get(i)).queue();
+
+					Cooldowns.UKLJUCI_COOLDOWN_RESPONSE(Cooldowns.cooldown_brojno_respond_poruke);
+
 					return;
 				}
 			}
@@ -183,6 +182,18 @@ public class Commands extends ListenerAdapter {
 	    	SPAMUJ_KOMANDA(event, niz_reci);
 	    	POSALJI_LOG(admin_logovi, event, event.getMember());
 	    break;
+	    
+	    case prefix + "spamuj_bot_rp":
+	    	SPAMUJ_BOT_RESPONDPORUKE(event, niz_reci);
+	    break;
+	    
+	    case prefix + "obrisi_bot_rp":
+	    	OBRISI_BOT_RESPONDPORUKE(event, niz_reci);
+	    break;
+	    
+	    case prefix + "postavi_cooldown":
+	    	POSTAVI_COOLDOWN(event, niz_reci);
+	    break;
 		}
 	}
 	
@@ -190,10 +201,6 @@ public class Commands extends ListenerAdapter {
 		if(admin_logovi == null) {
 			return;
 		}
-		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");  
-		LocalDateTime now = LocalDateTime.now();  
-		
 		EmbedBuilder eb = new EmbedBuilder();
 		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
 		eb.setTitle("KORISCENJE KOMANDE!");
@@ -207,6 +214,63 @@ public class Commands extends ListenerAdapter {
 		eb.setThumbnail("https://emojipedia-us.s3.amazonaws.com/source/skype/289/double-exclamation-mark_203c-fe0f.png");
 		
 		admin_logovi.sendMessageEmbeds(eb.build()).queue();
+	}
+	
+	public static void SPAMUJ_BOT_RESPONDPORUKE(MessageReceivedEvent event, String[] poruka) throws FileNotFoundException {
+		if(!event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			return;
+		}
+		
+		if(!event.getAuthor().getAsTag().equals(kreator)){
+			event.getChannel().sendTyping().queue();
+  	  		event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+			event.getMessage().addReaction("❌").queue();
+			return;
+		}
+		
+		if(poruka.length != 2) {
+			return;
+		}
+		
+		String tC = poruka[1];
+		
+		tC = tC.substring(2, 20);
+		
+		TextChannel kanal = event.getGuild().getTextChannelById(tC);
+		
+		if(kanal == null) {
+			return;
+		}
+		
+		List<String> triggeri = new ArrayList<String>();
+		List<String> poruke = new ArrayList<String>();
+
+		File triggers = new File("triggeri.txt");
+		File messages = new File("poruke.txt");
+
+		Scanner tR = new Scanner(triggers);
+		Scanner mR = new Scanner(messages);
+			
+		while (tR.hasNextLine()) {
+		    String data = tR.nextLine();
+		    triggeri.add(data);
+		 }
+		 
+		 while(mR.hasNextLine()) {
+			 String data = mR.nextLine();
+			 poruke.add(data);
+		 }
+		 
+		 for(int i = 0; i < triggeri.size(); i++) {
+			 kanal.sendMessage("--------------------\nPoruka: " + triggeri.get(i) + "\n" + poruke.get(i) + "\n").queue();
+		 }
+	
+		 String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":F>";
+		 
+		 kanal.sendMessage("Vreme koriscenja: " + vreme + "\nPoruke ce se nakon mesec dana poslati ponovo ovde.\n").queue();
+		 
+		 tR.close();
+		 mR.close();
 	}
 	
 	public static void INFO_KOMANDA(MessageReceivedEvent event, String[] poruka) {
@@ -252,7 +316,15 @@ public class Commands extends ListenerAdapter {
 		
 		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
 		
+		event.getMessage().addReaction("✅").queue();
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		
+		eb.clear();
+		
 		if(event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			eb.setTitle("**RESPOND PORUKE**");
+			eb.setColor(Color.CYAN);
+			
 			String specijalne_reci = "";
 			List<String> triggeri = new ArrayList<String>();
 			
@@ -275,15 +347,19 @@ public class Commands extends ListenerAdapter {
 				specijalne_reci += temp;
 			}
 			
-			eb.addField("Dodaj poruku na odgovaranje", prefix + "dodaj_respondporuku", false);
-			eb.addField("Listaj poruke za odgovaranje", prefix + "listaj_respondporuke", false);
+			eb.addField(prefix + "dodaj_respondporuku", "Dodaj poruku na odgovaranje", false);
+			eb.addField(prefix + "listaj_respondporuke", "Listaj poruke za odgovaranje", false);
+			eb.addField(prefix + "obrisi_bot_rp", "Obrisi sve poruke za odgovaranja", false);
+			eb.addField(prefix + "spamuj_bot_rp <#kanal>", "Listaj sve respond poruke u kanal", false);
+			eb.addField("Cooldown za respond poruke", Cooldowns.cooldown_brojno_respond_poruke.toString(), false);
+			eb.addField(prefix + "postavi_cooldown <int>", "Postavljanje cooldown-a ne odredjenu vrednost", false);
 			
 			eb.addField("Specijalne reci za genggengv2", specijalne_reci, false);
+			
+			eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+			event.getChannel().sendMessageEmbeds(eb.build()).queue();
 		}
-		
-		event.getMessage().addReaction("✅").queue();
-		
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 	
 	public static void KORISNI_LINKOVI_KOMANDA(MessageReceivedEvent event, String[] poruka) {
@@ -297,12 +373,11 @@ public class Commands extends ListenerAdapter {
 		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
 		
 		eb.addField("Dropbox Survival", 				"https://www.dropbox.com/sh/mkqwwg655ou36n8/AADv4xXVBdRgX63inKrmAegia?dl=0", false);
+		eb.addField("Raspored Letnjeg Semestra", "http://www.ftn.uns.ac.rs/n893884880/racunarstvo-i-automatika", false);
 		eb.addField("Studenski web servis", 			"https://ssluzba.ftn.uns.ac.rs/ssluzbasp/", false);
 		eb.addField("Matematička Analiza 1", 			"https://manaliza1.wordpress.com/", false);
 		eb.addField("Algebra", 							"http://imft.ftn.uns.ac.rs/~rade/elektro_diskretna_e2.html", false);
-		eb.addField("PJiSP Vezbe", 						"https://github.com/randomCharacter/PJISP", false);
 		eb.addField("Repozitorijum",					"http://www.acs.uns.ac.rs/sr/repozitorijum", false);
-		eb.addField("Engleski jezik",					"http://branalicen.wix.com/engleski-obavestenja", false);
 		eb.addField("OET",								"http://www.ktet.ftn.uns.ac.rs/index.php?option=com_content&task=view&id=31&Itemid", false);
 		eb.addField("Fizika",							"http://www.ftn.uns.ac.rs/1321325633/racunarstvo-i-automatika", false);
 		
@@ -312,7 +387,7 @@ public class Commands extends ListenerAdapter {
 	}
 	
 	public static void SHUTDOWN_KOMANDA(MessageReceivedEvent event, String[] poruka) {
-		if(event.getAuthor().getAsTag().equals("NenadG#4390")){
+		if(event.getAuthor().getAsTag().equals(kreator)){
 			event.getMessage().addReaction("✅").queue();
 			event.getChannel().sendTyping().queue();
 			event.getChannel().sendMessage("Iskljucivanje bota...").queue();
@@ -435,8 +510,6 @@ public class Commands extends ListenerAdapter {
 	
 	public static void PING_KOMANDA(MessageReceivedEvent event, String[] poruka) {
 		
-		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
-		
 		long start = System.currentTimeMillis();
 		event.getChannel().sendMessage("PING!").queue();
 		long end = System.currentTimeMillis();
@@ -447,22 +520,42 @@ public class Commands extends ListenerAdapter {
 	public static Boolean PURGE_KOMANDA(MessageReceivedEvent event, String[] poruka) {
 		int brojPoruka = 0;
 	
-		if(poruka.length != 2) {
-			event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+		if(poruka.length < 2 || poruka.length > 3) {
+			event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka> ILI " + prefix + "purge <br poruka> <kanal>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
 			return false;
 		}
 	
 	 	try{
             brojPoruka = Integer.parseInt(poruka[1]);
             
-            List<Message> messages = event.getChannel().getHistory().retrievePast(brojPoruka + 1).complete();
-            event.getTextChannel().deleteMessages(messages).queue();
+            if(poruka.length == 2) {
+	            List<Message> messages = event.getChannel().getHistory().retrievePast(brojPoruka + 1).complete();
+	            event.getTextChannel().deleteMessages(messages).queue();
+            } else {
+            	
+            	String tC = poruka[2];
+        		
+        		tC = tC.substring(2, 20);
+        		
+        		TextChannel kanal = event.getGuild().getTextChannelById(tC);
+        		
+        		if(kanal == null) {
+        			event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka> ILI " + prefix + "purge <br poruka> <kanal>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+        			return false;
+        		}
+            	
+            	List<Message> messages = kanal.getHistory().retrievePast(brojPoruka + 1).complete();
+	            kanal.deleteMessages(messages).queue();
+	            
+	            event.getMessage().addReaction("✅").queue();
+	            event.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
+            }
             
             return true;
         }
         catch (NumberFormatException ex){
-        	event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
-        	return false;
+        	event.getChannel().sendMessage("Pogresna sintaksa. Koriscenje: " + prefix + "purge <br poruka> ILI " + prefix + "purge <br poruka> <kanal>").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+			return false;
         }
 	}
 	
@@ -610,7 +703,7 @@ public class Commands extends ListenerAdapter {
 			return;
 		}
 		
-		if(poruka[poruka.length - 1].contains(".png") || poruka[poruka.length - 1].contains(".jpg") || poruka[poruka.length - 1].contains(".gif")) {
+		if(poruka[poruka.length - 1].contains("png") || poruka[poruka.length - 1].contains("jpg") || poruka[poruka.length - 1].contains("gif")) {
 			
 			File triggeri = new File("triggeri.txt");
 			File poruke = new File("poruke.txt");
@@ -629,7 +722,10 @@ public class Commands extends ListenerAdapter {
 			
 			BufferedWriter b = new BufferedWriter(wr_triggeri);
 			PrintWriter p = new PrintWriter(b);
-			p.print("\n" + trigger);
+			
+			trigger = trigger.toLowerCase();
+			
+			p.println(trigger);
 			
 			b.close();
 			p.close();
@@ -637,7 +733,7 @@ public class Commands extends ListenerAdapter {
 			b = new BufferedWriter(wr_poruke);
 			p = new PrintWriter(b);
 			
-			p.print("\n" + poruka[poruka.length - 1]);
+			p.println(poruka[poruka.length - 1]);
 			
 			b.close();
 			p.close();
@@ -657,58 +753,21 @@ public class Commands extends ListenerAdapter {
 			return;
 		}
 		
-		List<String> triggeri = new ArrayList<String>();
-		List<String> poruke = new ArrayList<String>();
-		
 		File triggers = new File("triggeri.txt");
 		File messages = new File("poruke.txt");
 		
-		try {
-			Scanner tR = new Scanner(triggers);
-			Scanner mR = new Scanner(messages);
-			
-			 while (tR.hasNextLine()) {
-			    String data = tR.nextLine();
-			    triggeri.add(data);
-			 }
-			 
-			 while(mR.hasNextLine()) {
-				 String data = mR.nextLine();
-				 poruke.add(data);
-			 }
-			 
-			 tR.close();
-			 mR.close();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		EmbedBuilder eb = new EmbedBuilder();
-		
-		eb.setTitle("**AUTORESPOND PORUKE**");
-		eb.setColor(Color.CYAN);
-		String vreme = "<t:" + (System.currentTimeMillis() / 1000L) + ":f>";
-		eb.setDescription("Komanda: **" + poruka[0] + "**. \nIskoriscenja od strane: " + event.getAuthor().getAsMention() + "\nVreme koriscenja: " + vreme);
-		
-		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
-		
-		for(int i = 0; i < triggeri.size(); i++) {
-			eb.addField(triggeri.get(i), poruke.get(i), false);
-		}
-		
-		event.getMessage().addReaction("✅").queue();
-		event.getChannel().sendMessageEmbeds(eb.build()).queue();
+		event.getChannel().sendMessage("Triggeri").addFile(triggers).queue();
+		event.getChannel().sendMessage("Poruke").addFile(messages).queue();
 	}
 
 	public static void SPAMUJ_KOMANDA(MessageReceivedEvent event, String[] poruka) {
-	
-		if(cooldown == true) {
-			event.getChannel().sendMessage("Komanda trenutno ne radi. Trenutan cooldown: " + cooldown_duzina + "s").queue(m -> m.delete().queueAfter(10, TimeUnit.SECONDS));
-			event.getMessage().addReaction("❌").queue();
-			return;
-		} else {
+		
 			int broj_poruka;
+			
+			if(Cooldowns.cooldown_spamovanje == true) {
+				event.getMessage().addReaction("❌").queue();
+				return;
+			}
 			
 			try {
 				broj_poruka = Integer.parseInt(poruka[poruka.length - 1]);
@@ -718,8 +777,8 @@ public class Commands extends ListenerAdapter {
 				return;
 			}
 	
-		    if(broj_poruka > 30) {
-		      broj_poruka = 30;
+		    if(broj_poruka > 20) {
+		      broj_poruka = 20;
 		    }
 	
 			String poruka_za_slanje = "";
@@ -742,23 +801,51 @@ public class Commands extends ListenerAdapter {
 			}
 			
 			event.getMessage().delete().queue();
-			
-			ZAVRSI_COOLDOWN(cooldown_duzina);
-		}
 	    
-	  }
+			Cooldowns.UKLJUCI_COOLDOWN(15);
+	}
 	
-	public static void ZAVRSI_COOLDOWN(Integer cooldown_duzina) {
-		
-		cooldown = true;
-		
-		new Timer().schedule(new TimerTask() {	
-			public void run() {	
-			    cooldown = false;
-			    
-			    this.cancel();
-			    return;
-			}},cooldown_duzina * 1000, 2394832480L);	
+	public static void OBRISI_BOT_RESPONDPORUKE(MessageReceivedEvent event, String[] poruka) {
+		if(!event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			return;
 		}
+		
+		if(Cooldowns.cooldown_brisanje_rp == true) {
+			return;
+		}
+		
+		if(!event.getAuthor().getAsTag().equals(kreator)){
+			event.getChannel().sendTyping().queue();
+  	  		event.getChannel().sendMessage("Korisnik nema prava da ovo uradi.").queue(m -> m.delete().queueAfter(5, TimeUnit.SECONDS));
+			event.getMessage().addReaction("❌").queue();
+			return;
+		}
+		
+		event.getChannel().sendMessage("Da li ste sigurni da zelite da obrisete sve respond poruke za server **" + event.getGuild().getName() + "**?\nSacekajte 15 sekundi nakon odgovora.\nDA za brisanje. Ovo ne moze biti prepravljeno!!").queue(n -> n.delete().queueAfter(30, TimeUnit.SECONDS));
+		
+		Cooldowns.UKLJUCI_COOLDOWN_ZA_BRISANJE_RP(event);
+	}
 	
-}
+	public static void POSTAVI_COOLDOWN(MessageReceivedEvent event, String[] poruka) {
+		if(!event.getGuild().getName().toLowerCase().equals("genggengv2")) {
+			return;
+		}
+		
+		if(poruka.length != 2) {
+			return;
+		}
+		
+		Integer vrednost;
+		
+		vrednost = Integer.parseInt(poruka[1]);
+
+    if(vrednost < 0 || vrednost > 120) {
+      event.getChannel().sendMessage("Budite realisticni sa vremenom...").queue();
+      return;
+    }
+		Cooldowns.cooldown_brojno_respond_poruke = vrednost;
+		
+		event.getChannel().sendMessage("Postavljen cooldown na " + vrednost.toString() + " sekundi.").queue();
+	}
+    
+  }
