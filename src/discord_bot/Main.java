@@ -12,7 +12,10 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +42,11 @@ public class Main {
 									InterruptedException, IOException {					
 	// Main funkcija
 	
-  String token = System.getenv("token");											
-  // Uzimanje tokena iz secret environment variable
+	// -- Vadjenja tokena --
+		
+	String token = System.getenv("token");		
+    	
+    	// -- Instanciranje objekta -- 
 	
 	jda = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS).build();
     	// Instanciranje JDA objekta, sa tokenom
@@ -68,14 +74,33 @@ public class Main {
     
 	jda.addEventListener(new OtherEvents());	
     	// Klase Commands i JoinEvent
+	
+	jda.addEventListener(new SlashCommands());
+
+  jda.addEventListener(new Notifications());
 		
 	jda.awaitReady();	
-    	// Cekamo pocetak
-		
-	// jda.setAutoReconnect(true);	
-    	// U slucaju diskonekta, ponovo se ukljuci
-		
-	// -- Odrzavanje bota aktivnim --
+	
+	CommandListUpdateAction commands = jda.updateCommands();
+	
+	commands.addCommands(
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("shutdown", "Iskljucuje bota na odredjeno vreme"),
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("say", "Iskljucuje bota na odredjeno vreme")
+				.addOption(OptionType.STRING, "izjava", "Sta zelite da bot kaze"),
+				
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("info", "Informacije o komandama bota"),
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("ping", "Pingovanje bota 🏓"),
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("izadji", "Izbaci bota sa servera"),
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("preimenuj_kanal", "Preimenuj kanal u drugi naziv")
+				.addOption(OptionType.CHANNEL, "origkanal", "Kanal za preimenovanje")
+				.addOption(OptionType.STRING, "novikanal", "Novi naziv kanala")
+			);
+	
+	commands.addCommands((
+			net.dv8tion.jda.api.interactions.commands.build.Commands.slash("testiranje_dugmeta", "Testiranje dugmica nekih")
+			));
+	
+	commands.queue();
 		
 	HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);			
     	// Aktiviramo server na portu 8
@@ -88,6 +113,6 @@ public class Main {
     
     	server.start();	
     	// Pocinjemo server
-
+    	
 	}
 }

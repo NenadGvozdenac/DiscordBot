@@ -20,7 +20,7 @@ public class OtherEvents extends ListenerAdapter {
 	final static String prefix = "!";
 	
 	final static String admin_kanal = "admin-logs";
-	final static String dobrodoslica_kanal = "dobrodosli";
+	final static String dobrodoslica_kanal = "welcome";
 	
 	final static String admin_kategorija = "Admin Kategorija";
 	final static String dobrodoslica_kategorija = "Dobrodosli";

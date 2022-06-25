@@ -9,6 +9,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -19,6 +20,7 @@ public class Cooldowns {
 	public static Boolean cooldown_brisanje_rp = false;
 	
 	public static Integer cooldown_brojno_respond_poruke = 15;
+	public static Integer cooldown_iskljucivanje = 5;
 	
 	public static void UKLJUCI_COOLDOWN(Integer cooldown_duzina) {
     cooldown_spamovanje = true;
@@ -103,5 +105,28 @@ public class Cooldowns {
   		        cooldown_brisanje_rp = false;
   			}
   		}, 15*1000);	
-  }
+  	  }
+  
+	  public static void ISKLJUCI_BOTA_COOLDOWN(Integer vreme) {
+		new Timer().schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				Main.jda.shutdown();
+				System.exit(0);
+			}
+			
+		}, vreme * 1000);
+	  }
+	  
+	  public static void IZADJI_IZ_SERVERA(Guild guild, Integer vreme) {
+			new Timer().schedule(new TimerTask() {
+
+				@Override
+				public void run() {
+					guild.leave().queue();
+				}
+				
+			}, vreme * 1000);
+		  }
 }
