@@ -1,0 +1,323 @@
+[
+  {
+    "Naziv": "posaljinoviupdate",
+    "Deskripcija": "Posalji Novi Update",
+    "Opcija": [],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "posaljiglobalnoporuku_id",
+    "Deskripcija": "Posalji poruku preko ID.",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "id",
+        "OptionTypeDesc": "ID poruke za slanje",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "trenutnovreme",
+    "Deskripcija": "Dobij formatirano trenutno vreme.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "napravi_json_rp",
+    "Deskripcija": "Napravi JSON respond poruke",
+    "Opcija": [],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "listaj_json_rp",
+    "Deskripcija": "Listaj sve JSON respond poruke",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "obrisi_rp",
+    "Deskripcija": "Obrisi respond poruku za bota",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "trigger",
+        "OptionTypeDesc": "Trigger za poruku koja treba da se obrise",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "dodaj_rp",
+    "Deskripcija": "Dodaj novu respond poruku",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "trigger",
+        "OptionTypeDesc": "Trigger za pisanje respond poruke.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "response",
+        "OptionTypeDesc": "Response za pisanje respond poruke.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "ban",
+    "Deskripcija": "Banuj korisnika sa servera",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite da banujete?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "kick",
+    "Deskripcija": "Kickuj korisnika sa servera",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite da kickujete?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "analizaformule",
+    "Deskripcija": "Ispisuje formule iz analize",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "timeout",
+    "Deskripcija": "Stavi neku osobu u timeout",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Izaberite korisnika za stavljanje u timeout.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "ping",
+    "Deskripcija": "Odredjivanje pinga bota",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "info",
+    "Deskripcija": "Informacije o komandama bota",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "say",
+    "Deskripcija": "Govori u vase ime",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "izjava",
+        "OptionTypeDesc": "Sta zelite da kaze u vase ime",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "shutdown",
+    "Deskripcija": "Iskljucuje bota za odredjeno vreme",
+    "Opcija": [],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "izadji",
+    "Deskripcija": "Izlazi iz servera",
+    "Opcija": [],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "help",
+    "Deskripcija": "Registrovane komande bota",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "github",
+    "Deskripcija": "Vraca nesin github",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "korisni_linkovi",
+    "Deskripcija": "Korisni linkovi za FTN E2 smer, Racunarstvo i Automatika.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "nick",
+    "Deskripcija": "Menjanje nickname korisnika",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite promeniti ime?",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "novoime",
+        "OptionTypeDesc": "Novi nickname korisnika",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "purge",
+    "Deskripcija": "Brisanje broja poruka",
+    "Opcija": [
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "brojporuka",
+        "OptionTypeDesc": "Broj poruka za brisanje.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "CHANNEL",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "U kom kanalu zelite da brisete poruke?",
+        "ObaveznaOpcija": false
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "bot_invite",
+    "Deskripcija": "Invite-ovanje bota u server",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "roast",
+    "Deskripcija": "Roast-ovanje osobe",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite roast-ovati?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "bitno_obavestenje",
+    "Deskripcija": "Bitno Obavestenje za sve servere",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "izjava",
+        "OptionTypeDesc": "Koju poruku zelite da posaljete?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "spamuj",
+    "Deskripcija": "Spamovanje poruke",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "poruka",
+        "OptionTypeDesc": "Ispisite poruku za spamovanje",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "brojporuka",
+        "OptionTypeDesc": "Broj poruka za spamovanje.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "glasanje",
+    "Deskripcija": "Glasanje u kanalu",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "naslov",
+        "OptionTypeDesc": "Naslov",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "poruka",
+        "OptionTypeDesc": "Poruka za glasanje",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "trajanje_sekunde",
+        "OptionTypeDesc": "Koliko sekundi zelite da ovo glasanje bude dugacko?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "napravi_kanal",
+    "Deskripcija": "Pravljenje novog kanala",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "Naziv novog kanala.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "BOOLEAN",
+        "OptionTypeName": "isvoice",
+        "OptionTypeDesc": "Da li je kanal voice kanal?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "obrisi_kanal",
+    "Deskripcija": "Brisanje kanala",
+    "Opcija": [
+      {
+        "OptionType": "CHANNEL",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "Naziv kanala za brisanje.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "posalji_poruku",
+    "Deskripcija": "Salje poruku glavnom developeru",
+    "Opcija": [],
+    "AdminOnly": false
+  }
+]

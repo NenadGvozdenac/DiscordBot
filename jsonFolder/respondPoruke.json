@@ -1,0 +1,408 @@
+[
+    {
+      "Naziv": "sta je ovo",
+      "Poruka": {
+        "Trigger": "sta je ovo",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/948997198190895134/Screenshot_20220303-182104_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "haha retard",
+      "Poruka": {
+        "Trigger": "haha retard",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/961948011267751936/1649416672505.jpg"
+      }
+    },
+    {
+      "Naziv": "kad te pogodi pesma",
+      "Poruka": {
+        "Trigger": "kad te pogodi pesma",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/966823510376853524/Screenshot_142.png"
+      }
+    },
+    {
+      "Naziv": "dodatni bodovi",
+      "Poruka": {
+        "Trigger": "dodatni bodovi",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/987326537403596840/unknown.png"
+      }
+    },
+    {
+      "Naziv": "fizika",
+      "Poruka": {
+        "Trigger": "fizika",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/954785956832116786/984528236212015144/unknown.png"
+      }
+    },
+    {
+      "Naziv": "a da nadjes neke picke",
+      "Poruka": {
+        "Trigger": "a da nadjes neke picke",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/975174391509954590/SmartSelect_20220515-011442_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "resi pingua",
+      "Poruka": {
+        "Trigger": "resi pingua",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/966783083217031298/unknown.png"
+      }
+    },
+    {
+      "Naziv": "stapic",
+      "Poruka": {
+        "Trigger": "stapic",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/957785459386372106/Screenshot_4.png"
+      }
+    },
+    {
+      "Naziv": "ups uredjaj",
+      "Poruka": {
+        "Trigger": "ups uredjaj",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/992062776514187345/unknown.png"
+      }
+    },
+    {
+      "Naziv": "dobar covek",
+      "Poruka": {
+        "Trigger": "dobar covek",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/995712261320613958/IMG_20220710_172459.jpg"
+      }
+    },
+    {
+      "Naziv": "aezakmi",
+      "Poruka": {
+        "Trigger": "aezakmi",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/987328238072242206/unknown.png"
+      }
+    },
+    {
+      "Naziv": "paket",
+      "Poruka": {
+        "Trigger": "paket",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/932975678247276604/980785477395284009/Kurir_je_je_l_moete_da_siete_po_paket0.mp4"
+      }
+    },
+    {
+      "Naziv": "djeca",
+      "Poruka": {
+        "Trigger": "djeca",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/954785956832116786/957786689684799568/Screenshot_1.png"
+      }
+    },
+    {
+      "Naziv": "suicid",
+      "Poruka": {
+        "Trigger": "suicid",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/971701416844468314/20190904_115100.jpg"
+      }
+    },
+    {
+      "Naziv": "klosar",
+      "Poruka": {
+        "Trigger": "klosar",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/999434768066285658/unknown.png"
+      }
+    },
+    {
+      "Naziv": "pare",
+      "Poruka": {
+        "Trigger": "pare",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/971502728637448232/videoplayback_10.mp4"
+      }
+    },
+    {
+      "Naziv": "haha nije",
+      "Poruka": {
+        "Trigger": "haha nije",
+        "ResponseLatinica": "kurac usta"
+      }
+    },
+    {
+      "Naziv": "pronoun",
+      "Poruka": {
+        "Trigger": "pronoun",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/988435245651099699/unknown.png"
+      }
+    },
+    {
+      "Naziv": "miha dominacija",
+      "Poruka": {
+        "Trigger": "miha dominacija",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/971529909346385951/Screenshot_241.png"
+      }
+    },
+    {
+      "Naziv": "ludilo",
+      "Poruka": {
+        "Trigger": "ludilo",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/958486578718715996/IMG-20220328-WA0004.jpg"
+      }
+    },
+    {
+      "Naziv": "analiza",
+      "Poruka": {
+        "Trigger": "analiza",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/968959831014793226/unknown.png"
+      }
+    },
+    {
+      "Naziv": "veljko lol",
+      "Poruka": {
+        "Trigger": "veljko lol",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/994666024144228372/SmartSelect_20220707-200735_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "ala me mrzi raditi sve",
+      "Poruka": {
+        "Trigger": "ala me mrzi raditi sve",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/966791729976066118/unknown.png"
+      }
+    },
+    {
+      "Naziv": "umetn",
+      "Poruka": {
+        "Trigger": "umetn",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/953772030468177960/Screenshot_143.png"
+      }
+    },
+    {
+      "Naziv": "sok",
+      "Poruka": {
+        "Trigger": "sok",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/971523140515676180/Screenshot_326.png"
+      }
+    },
+    {
+      "Naziv": "hakovani krele",
+      "Poruka": {
+        "Trigger": "hakovani krele",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/993881376900255894/unknown.png"
+      }
+    },
+    {
+      "Naziv": "pecaljka",
+      "Poruka": {
+        "Trigger": "pecaljka",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/971184380749967400/Screenshot_1.png"
+      }
+    },
+    {
+      "Naziv": "haha glupan",
+      "Poruka": {
+        "Trigger": "haha glupan",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/951214934258221146/953417807603855431/IMG_20220315_232141.jpg"
+      }
+    },
+    {
+      "Naziv": "mihajlov kurac",
+      "Poruka": {
+        "Trigger": "mihajlov kurac",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/967078564191166474/Screenshot_1.png"
+      }
+    },
+    {
+      "Naziv": "krokodil",
+      "Poruka": {
+        "Trigger": "krokodil",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/968864144252092437/Screenshot_318.png"
+      }
+    },
+    {
+      "Naziv": "za uspomenu mihajlo",
+      "Poruka": {
+        "Trigger": "za uspomenu mihajlo",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/945791088034189332/980169249295327332/unknown.png"
+      }
+    },
+    {
+      "Naziv": "zene",
+      "Poruka": {
+        "Trigger": "zene",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/959161786152665178/unknown.png"
+      }
+    },
+    {
+      "Naziv": "dzezva",
+      "Poruka": {
+        "Trigger": "dzezva",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/972094993500110868/SmartSelect_20220506-131822_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "github",
+      "Poruka": {
+        "Trigger": "github",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/954785956832116786/986344257629614151/1655233191606.jpg"
+      }
+    },
+    {
+      "Naziv": "ako prodjem",
+      "Poruka": {
+        "Trigger": "ako prodjem",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/988428924763664384/unknown.png"
+      }
+    },
+    {
+      "Naziv": "klasican dan u nedelji",
+      "Poruka": {
+        "Trigger": "klasican dan u nedelji",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/897120006633058324/958517293103595530/SmartSelect_20220330-020414_Drive.jpg"
+      }
+    },
+    {
+      "Naziv": "hrist",
+      "Poruka": {
+        "Trigger": "hrist",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/954785956832116786/957786759125667850/Screenshot_186.jpg"
+      }
+    },
+    {
+      "Naziv": "petak",
+      "Poruka": {
+        "Trigger": "petak",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/478887066659454977/935254726575001610/20220124_202739.png"
+      }
+    },
+    {
+      "Naziv": "fakultet",
+      "Poruka": {
+        "Trigger": "fakultet",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/983480816288034886/1654550495538.jpg?width=262&height=582"
+      }
+    },
+    {
+      "Naziv": "svaka pinguova poruka",
+      "Poruka": {
+        "Trigger": "svaka pinguova poruka",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/961347535149076550/unknown.png"
+      }
+    },
+    {
+      "Naziv": "sociva",
+      "Poruka": {
+        "Trigger": "sociva",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/983108705560199198/SmartSelect_20220605-224254_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "struja",
+      "Poruka": {
+        "Trigger": "struja",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/971184557338558564/IMG_2053.png"
+      }
+    },
+    {
+      "Naziv": "ide gas",
+      "Poruka": {
+        "Trigger": "ide gas",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/980955108500189204/IMG_20220531_000454.jpg"
+      }
+    },
+    {
+      "Naziv": "pisam",
+      "Poruka": {
+        "Trigger": "pisam",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/968590752227667978/unknown.png"
+      }
+    },
+    {
+      "Naziv": "pinguleaves",
+      "Poruka": {
+        "Trigger": "pinguleaves",
+        "ResponseLatinica": "https://images-ext-1.discordapp.net/external/xGrTyreiBCHm2Ymp9s1B_wTUBd75Comx6ntCPcRnHek/%3Fitemid%3D25661793/https/media1.tenor.com/images/33f7e4db9f7b492db80b33750e5859a3/tenor.gif"
+      }
+    },
+    {
+      "Naziv": "deca",
+      "Poruka": {
+        "Trigger": "deca",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/954785956832116786/957786689684799568/Screenshot_1.png"
+      }
+    },
+    {
+      "Naziv": "decko",
+      "Poruka": {
+        "Trigger": "decko",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/961031822945427527/SmartSelect_20220406-003648_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "cock",
+      "Poruka": {
+        "Trigger": "cock",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/953354686327582770/SmartSelect_20220315-191015_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "stopala",
+      "Poruka": {
+        "Trigger": "stopala",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/937123213807337542/SmartSelect_20220130-001303_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "cedomir jovanovic",
+      "Poruka": {
+        "Trigger": "cedomir jovanovic",
+        "ResponseLatinica": "https://www.espreso.co.rs/data/images/2017/04/04/19/188187_z01-news1-zorana-jevtic_share.jpg"
+      }
+    },
+    {
+      "Naziv": "sere mi se",
+      "Poruka": {
+        "Trigger": "sere mi se",
+        "ResponseLatinica": "https://media.discordapp.net/attachments/931636633554538517/986606895349518346/Screenshot_225.png"
+      }
+    },
+    {
+      "Naziv": "stevica",
+      "Poruka": {
+        "Trigger": "stevica",
+        "ResponseLatinica": "https://images-ext-2.discordapp.net/external/7HVWNdP3qPKSymKdsU2_hpyu_FMJ9i4gGI8nQ5eOIkU/https/media.discordapp.net/attachments/931636633554538517/970127304724471818/unknown.png"
+      }
+    },
+    {
+      "Naziv": "ono kad skontas da ides na usmeni",
+      "Poruka": {
+        "Trigger": "ono kad skontas da ides na usmeni",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/967160845333323848/unknown.png"
+      }
+    },
+    {
+      "Naziv": "znas zasto",
+      "Poruka": {
+        "Trigger": "znas zasto",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/966667780197863424/Screenshot_312.png"
+      }
+    },
+    {
+      "Naziv": "jelde",
+      "Poruka": {
+        "Trigger": "jelde",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/932240458703306794/SmartSelect_20220116-122310_Discord.jpg"
+      }
+    },
+    {
+      "Naziv": "pametan jako",
+      "Poruka": {
+        "Trigger": "pametan jako",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/977934326706622514/Screenshot_362.png"
+      }
+    },
+    {
+      "Naziv": "batine",
+      "Poruka": {
+        "Trigger": "batine",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/932975678247276604/984182733146292274/unknown.png"
+      }
+    },
+    {
+      "Naziv": "najveci troll ikad",
+      "Poruka": {
+        "Trigger": "najveci troll ikad",
+        "ResponseLatinica": "https://cdn.discordapp.com/attachments/931636633554538517/971007944441331762/unknown.png"
+      }
+    }
+  ]
