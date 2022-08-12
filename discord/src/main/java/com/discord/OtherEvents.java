@@ -4,15 +4,17 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.entities.channel.unions.DefaultGuildChannelUnion;
+import net.dv8tion.jda.api.entities.Guild.BoostTier;
 import net.dv8tion.jda.api.events.ExceptionEvent;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.ReconnectedEvent;
@@ -21,6 +23,7 @@ import net.dv8tion.jda.api.events.channel.ChannelCreateEvent;
 import net.dv8tion.jda.api.events.channel.ChannelDeleteEvent;
 import net.dv8tion.jda.api.events.guild.GuildBanEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
+import net.dv8tion.jda.api.events.guild.GuildLeaveEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRemoveEvent;
 import net.dv8tion.jda.api.events.guild.update.GuildUpdateBoostCountEvent;
@@ -47,6 +50,10 @@ public class OtherEvents extends ListenerAdapter {
         		dobrodoslica_text_kanal = c;
         	}
         }
+
+		if(dobrodoslica_text_kanal == null) {
+			return;
+		}
         
         EmbedBuilder eb = new EmbedBuilder();
         
@@ -78,7 +85,7 @@ public class OtherEvents extends ListenerAdapter {
 
 	@Override
 	public void onException(@NotNull ExceptionEvent event){
-		event.getJDA().getGuildById("945790514605727755").getTextChannelById("1002918401750085643").sendMessage(event.getCause().getMessage() + "\n" + event.getCause().toString());
+		event.getJDA().getGuildById("945790514605727755").getTextChannelById("1002918401750085643").sendMessage(event.getCause().getMessage() + "\n" + event.getCause().toString()).queue();
 		event.getCause().printStackTrace();
 	}
 
@@ -110,95 +117,130 @@ public class OtherEvents extends ListenerAdapter {
 		}
 		
 		LogChannelEvent.POSALJI_KANAL_PRAVLJENJE_LOG(adminTextKanal, event);
-
 	}
 	
 	@Override
 	public void onGuildUpdateBoostCount(@NotNull GuildUpdateBoostCountEvent event) {
-		TextChannel channel = event.getGuild().getTextChannelsByName(dobrodoslica_kanal, true).get(0);
 
-		if(channel == null) {
-			channel = event.getGuild().getTextChannelsByName(dobrodoslica_kanal2, true).get(0);
-		}
+		TextChannel kanalZaSlanjeObavestenja = null;
+		
+		List<TextChannel> kanali = event.getGuild().getTextChannels();
+        
+        for(TextChannel c : kanali) {
+        	if(c.getName().equalsIgnoreCase(dobrodoslica_kanal) || c.getName().equalsIgnoreCase(dobrodoslica_kanal2)) {
+        		kanalZaSlanjeObavestenja = c;
+        	}
+        }
 
-		if(channel == null) {
-			channel = event.getGuild().getDefaultChannel().asTextChannel();
+		if(kanalZaSlanjeObavestenja == null) {
+			return;
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("Novi boost \uE10D");
-		eb.setThumbnail("https://pngimg.com/uploads/confetti/confetti_PNG86957.png");
-		eb.setFooter("Hvala na boost-ovanju! \u2764\uFE0F \u2764\uFE0F");
-		eb.setDescription("Broj boost-ova servera se upravo povecao na **" + event.getNewBoostCount() + "**! \u2764\uFE0F");
+		eb.setTitle("Novi boost broj \u2757");
+		eb.setThumbnail(event.getGuild().getIconUrl());
+		eb.setColor(Color.pink);
 
-		channel.sendMessageEmbeds(eb.build()).queue();
+		if(event.getNewBoostCount() > event.getOldBoostCount()) {
+			eb.setFooter("Hvala na boost-ovanju! \u2764\uFE0F \u2764\uFE0F");
+			eb.setDescription("Broj boostova servera se povecao na **" + event.getNewBoostCount() + "**! Pre je bio **" + event.getOldBoostCount() + "**. \n\n\u2764\uFE0F \u2764\uFE0F");
+		} else {
+			eb.setFooter("by ShruggoBot");
+			eb.setDescription("Broj boostova servera se smanjio na **" + event.getNewBoostCount() + "**! Pre je bio **" + event.getOldBoostCount() + "**. \n\n\uD83D\uDE1E \uD83D\uDE1E");
+		}
+
+		kanalZaSlanjeObavestenja.sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override
 	public void onGuildUpdateBoostTier(@NotNull GuildUpdateBoostTierEvent event) {
 
-		TextChannel channel = event.getGuild().getTextChannelsByName(dobrodoslica_kanal, true).get(0);
+		TextChannel kanalZaSlanjeObavestenja = null;
+		
+		List<TextChannel> kanali = event.getGuild().getTextChannels();
+        
+        for(TextChannel c : kanali) {
+        	if(c.getName().equalsIgnoreCase(dobrodoslica_kanal) || c.getName().equalsIgnoreCase(dobrodoslica_kanal2)) {
+        		kanalZaSlanjeObavestenja = c;
+        	}
+        }
 
-		if(channel == null) {
-			channel = event.getGuild().getTextChannelsByName(dobrodoslica_kanal2, true).get(0);
-		}
-
-		if(channel == null) {
-			channel = event.getGuild().getDefaultChannel().asTextChannel();
+		if(kanalZaSlanjeObavestenja == null) {
+			return;
 		}
 
 		EmbedBuilder eb = new EmbedBuilder();
-		eb.setTitle("Novi boost tier \uE10D \uE10D \uE10D");
-		eb.setThumbnail("https://pngimg.com/uploads/confetti/confetti_PNG86957.png");
-		eb.setFooter("Hvala na boost-ovanju! \u2764\uFE0F \u2764\uFE0F");
-		eb.setDescription("Tier servera servera se upravo povecao na **" + event.getNewBoostTier() + "**! \u2764\uFE0F");
+		eb.setTitle("Novi boost tier \u2757");
+		eb.setThumbnail(event.getGuild().getIconUrl());
+		eb.setColor(Color.ORANGE);
 
-		channel.sendMessageEmbeds(eb.build()).queue();
+		if(event.getNewBoostTier().getMaxEmojis() > event.getOldBoostTier().getMaxEmojis()) {
+			eb.setFooter("Hvala na boost-ovanju! \u2764\uFE0F \u2764\uFE0F");
+			eb.setDescription("Tier servera servera se upravo povecao na **" + 
+				(event.getNewBoostTier() == BoostTier.NONE ? "0" : event.getNewBoostTier()) + 
+				"**! Pre je bio **" + (event.getOldBoostTier() == BoostTier.NONE ? "0" : event.getOldBoostTier()) + 
+				"**. \n\n\u2764\uFE0F \u2764\uFE0F"
+			);
+		} else {
+			eb.setDescription("Tier servera servera se upravo smanjio na **" + 
+				(event.getNewBoostTier() == BoostTier.NONE ? "0" : event.getNewBoostTier()) + 
+				"**! Pre je bio **" + (event.getOldBoostTier() == BoostTier.NONE ? "0" : event.getOldBoostTier()) + 
+				"**. \n\n\uD83D\uDE1E \uD83D\uDE1E"
+			);
+		}
+
+		kanalZaSlanjeObavestenja.sendMessageEmbeds(eb.build()).queue();
 	}
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
-		
-		Thread thread = new Thread(new Runnable() {
-			
-			long vreme = 120_000;
-			
-			@Override
-			public void run() {
+			long vreme = 15_000;	// PROMENITI U KURAC
+
+			TextChannel channel = event.getGuild().getDefaultChannel().asTextChannel();
 				
-				JDA jda = event.getJDA();
+			channel.sendMessage("👋 Pozdrav! Hvala što ste dodali ovog bota u **" + event.getGuild().getName() + "**. Sva pitanja, mogu ići direktno na **NenadG#0001**.").queue();
 				
-				DefaultGuildChannelUnion channel1 = event.getGuild().getDefaultChannel();
-				
-				TextChannel channel = channel1.asTextChannel();
-				
-				channel.sendMessage("👋 Pozdrav! Hvala što ste dodali ovog bota u **" + event.getGuild().getName() + "**. Sva pitanja, mogu ići direktno na **NenadG#0001**.").queue();
-				channel.sendMessage("Da li zelite kanal za dobrodoslicu ili kanal za slanje admin komandi? \nUkoliko da, pritisnite na dugme ispod i \"Zavrsi\" kada ste gotovi.").setActionRow(Button.primary("dobrodoslica", "DOBRODOSLICA"), Button.danger("adminkanal", "ADMIN KANAL"), Button.secondary("zavrsi", "ZAVRSI")).queue();
-				
-				jda.addEventListener(new DobrodoslicaKanaliPravljenje());
-				
-				new Timer().schedule(new TimerTask() {
+				channel.sendMessage(
+					"Da li zelite kanal za dobrodoslicu ili kanal za slanje admin komandi? \nUkoliko da, pritisnite na dugme ispod i \"Zavrsi\" kada ste gotovi.")
+					.setActionRow(
+						Button.primary("dobrodoslica", "DOBRODOSLICA"), 
+						Button.danger("adminkanal", "ADMIN KANAL"), 
+						Button.secondary("zavrsi", "ZAVRSI")
+					)
+				.queue(k -> {
+					new Timer().schedule(new TimerTask() {
 					
-					public void run() {	
-					    
-						List<Object> listaListenera = jda.getRegisteredListeners();
-						
-						for(Object o : listaListenera) {
-							if(o instanceof DobrodoslicaKanaliPravljenje) {
-								channel.sendMessage("Niste pritisnuli nista prethodnih " + vreme / 1000 + " sekundi.\nNece ni jedan kanal biti napravljen.").queue();
-								jda.removeEventListener(o);
+						public void run() {	
+							Boolean istekloVreme = false;
+
+							for(Button b : k.getButtons()) {
+								if(b.isDisabled()) {
+									istekloVreme = true;
+									break;
+								}
 							}
+
+							if(!istekloVreme) {
+								k.editMessage("Niste pritisnuli ni jedno dugme, a vreme od " + vreme / 1000 + " sekundi je isteklo.").setActionRows().queue(
+									m -> m.delete().queueAfter(15, TimeUnit.SECONDS),
+									error -> System.out.println("Napravljeni su neki kanali vec.")
+								);
+							}
+
+							this.cancel();
 						}
-						
-						this.cancel();
-						
-					}
-				}, vreme, 1);	
-			}
-		});
-		
-		thread.run();
-	}
+					}, vreme, 1);	
+				});
+				
+			EmbedBuilder eb = new EmbedBuilder();
+			eb.setTitle("Novo ulazenje u server!");
+			eb.setDescription("Server: " + event.getGuild().getName());
+			eb.setThumbnail(event.getGuild().getIconUrl());
+			eb.setFooter("ShruggoBot");
+
+			Message message = new MessageBuilder().setEmbeds(eb.build()).build();
+			event.getJDA().getGuildById("945790514605727755").getTextChannelById("1002918401750085643").sendMessage(message).queue();
+		}
 
 	@Override
 	public void onGuildBan(@NotNull GuildBanEvent event) {
@@ -229,5 +271,21 @@ public class OtherEvents extends ListenerAdapter {
 
 		LogChannelEvent.POSALJI_KICK_LOG(adminTextKanal, event);
 
+	}
+
+	@Override
+	public void onGuildLeave(@NotNull GuildLeaveEvent event) {
+		EmbedBuilder eb = new EmbedBuilder();
+		eb.setTitle("Izlaz is servera!");
+		eb.setDescription("Server: " + event.getGuild().getName());
+		eb.setThumbnail(event.getGuild().getIconUrl());
+		eb.setFooter("ShruggoBot");
+
+		try {
+			Message message = new MessageBuilder().setEmbeds(eb.build()).build();
+			event.getJDA().getGuildById("945790514605727755").getTextChannelById("1002918401750085643").sendMessage(message).queue();
+		} catch(NullPointerException e) {
+			
+		}
 	}
 }

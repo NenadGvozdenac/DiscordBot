@@ -24,6 +24,7 @@ class KomandaGlasanje extends ListenerAdapter {
 	EmbedBuilder eb;
 	long vremeTajmera = 25;
 	Boolean aktivnoGlasanje = false;
+	int brojac = 0;
 	
 	static List<String> opcijeZaGlasanje = new ArrayList<>();
 	
@@ -47,9 +48,17 @@ class KomandaGlasanje extends ListenerAdapter {
 	@Override
 	public void onMessageReceived(MessageReceivedEvent event1) {
 		
-		if(event1.getMember().equals(member) && event1.getGuild().equals(member.getGuild())) {
+		if(event1.getMember().equals(member) && event1.getGuild().equals(member.getGuild()) && event1.getChannel().equals(e.getChannel())) {
+			brojac++;
 			
 			if(event1.getMessage().getContentRaw().equals("stop")) {
+				event1.getMessage().delete().queue();
+				this.ZAVRSI_DODAVANJE(event1);
+				return;
+			}
+
+			if(brojac == 5) {
+				opcijeZaGlasanje.add(event1.getMessage().getContentRaw());
 				event1.getMessage().delete().queue();
 				this.ZAVRSI_DODAVANJE(event1);
 				return;
@@ -69,6 +78,7 @@ class KomandaGlasanje extends ListenerAdapter {
 		eb.setDescription(deskripcija + "\nVREME GLASANJA: " + vremeTajmera + " sekundi.");
 		eb.setColor(Color.blue);
 		eb.setFooter("AUTOR GLASANJA: " + this.e.getMember().getEffectiveName());
+		eb.setThumbnail("http://clipart-library.com/new_gallery/72-723054_big-question-mark-big-question-mark-transparent.png");
 		
 		List<Button> buttons = new ArrayList<>();
 		
@@ -92,9 +102,7 @@ class KomandaGlasanje extends ListenerAdapter {
 	private void ISPISI_POBEDNIKA(Message message, List<Button> b, EmbedBuilder eb2, MessageReceivedEvent event) {
 
 		JDA jda = event.getJDA();
-		
 		jda.removeEventListener(this);
-		
 		ButtonClick clickEvent = new ButtonClick(message);
 		
 		jda.addEventListener(clickEvent);

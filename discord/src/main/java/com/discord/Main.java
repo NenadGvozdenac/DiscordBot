@@ -17,8 +17,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
@@ -27,17 +25,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public class Main {			
 
 	public static JDA jda;					
-
+	public static Komanda[] globalneKomande, gengengKomande, privatneKomande;
 	public static void main(String[] args) throws LoginException, InterruptedException {		
-		
+
 	   	try (Reader reader = new FileReader(new File(new File("jsonFolder"), "token.json"))) {
 
 			Gson gson = new GsonBuilder()
@@ -57,7 +52,8 @@ public class Main {
 				new Notifications(),
 				new ModalCommands(),
 				new SelectMenuCommands(),
-				new HelpButton()
+				new HelpButton(),
+				new DobrodoslicaKanaliPravljenje()
 			).build();
 
 			Logger logger = LoggerFactory.getLogger(Main.class);
@@ -80,7 +76,8 @@ public class Main {
 				new Notifications(),
 				new ModalCommands(),
 				new SelectMenuCommands(),
-				new HelpButton()
+				new HelpButton(),
+				new DobrodoslicaKanaliPravljenje()
 			).build();
 
 			Logger logger = LoggerFactory.getLogger(Main.class);
@@ -148,104 +145,51 @@ public class Main {
 		
 		jda.awaitReady();
 
-		Komanda[] komande = {
-				new Komanda("posaljinoviupdate", "Posalji Novi Update", true),
-				new Komanda("posaljiglobalnoporuku_id", "Posalji poruku preko ID.", true, new Opcija(OptionType.STRING, "id", "ID poruke za slanje", true)),
-				new Komanda("trenutnovreme", "Dobij formatirano trenutno vreme.", false),
-				new Komanda("napravi_json_rp", "Napravi JSON respond poruke", true),
-				new Komanda("listaj_json_rp", "Listaj sve JSON respond poruke", false),
-				new Komanda("obrisi_rp", "Obrisi respond poruku za bota", true, new Opcija(OptionType.STRING, "trigger", "Trigger za poruku koja treba da se obrise", true)),
-				new Komanda("dodaj_rp", "Dodaj novu respond poruku", true, new Opcija(OptionType.STRING, "trigger", "Trigger za pisanje respond poruke.", true), new Opcija(OptionType.STRING, "response", "Response za pisanje respond poruke.", true)),
-				new Komanda("ban", "Banuj korisnika sa servera", true, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite da banujete?", true)),
-				new Komanda("kick", "Kickuj korisnika sa servera", true, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite da kickujete?", true)),
-				new Komanda("analizaformule", "Ispisuje formule iz analize"),
-				new Komanda("timeout", "Stavi neku osobu u timeout", true, new Opcija(OptionType.USER, "korisnik", "Izaberite korisnika za stavljanje u timeout.", true)),
-				new Komanda("ping", "Odredjivanje pinga bota"),
-				new Komanda("info", "Informacije o komandama bota"),
-				new Komanda("say", "Govori u vase ime", new Opcija(OptionType.STRING, "izjava", "Sta zelite da kaze u vase ime", true)),
-				new Komanda("shutdown", "Iskljucuje bota za odredjeno vreme", true),
-				new Komanda("izadji", "Izlazi iz servera", true),
-				new Komanda("help", "Registrovane komande bota"),
-				new Komanda("github", "Vraca nesin github"),
-				new Komanda("korisni_linkovi", "Korisni linkovi za FTN E2 smer, Racunarstvo i Automatika."),	
-				new Komanda("nick", "Menjanje nickname korisnika", new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite promeniti ime?", true), new Opcija(OptionType.STRING, "novoime", "Novi nickname korisnika", true)),
-				new Komanda("purge", "Brisanje broja poruka", new Opcija(OptionType.INTEGER, "brojporuka", "Broj poruka za brisanje.", true), new Opcija(OptionType.CHANNEL, "kanal", "U kom kanalu zelite da brisete poruke?", false)),
-				new Komanda("bot_invite", "Invite-ovanje bota u server"),
-				new Komanda("roast", "Roast-ovanje osobe", new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite roast-ovati?", true)),
-				new Komanda("bitno_obavestenje", "Bitno Obavestenje za sve servere", true, new Opcija(OptionType.STRING, "izjava", "Koju poruku zelite da posaljete?", true)),
-				new Komanda("spamuj", "Spamovanje poruke", new Opcija(OptionType.STRING, "poruka", "Ispisite poruku za spamovanje", true), new Opcija(OptionType.INTEGER, "brojporuka", "Broj poruka za spamovanje.", true)),
-				new Komanda("glasanje", "Glasanje u kanalu", new Opcija(OptionType.STRING, "naslov", "Naslov", true), new Opcija(OptionType.STRING, "poruka", "Poruka za glasanje", true), new Opcija(OptionType.INTEGER, "trajanje_sekunde", "Koliko sekundi zelite da ovo glasanje bude dugacko?", true)),
-				new Komanda("napravi_kanal", "Pravljenje novog kanala", true, new Opcija(OptionType.STRING, "kanal", "Naziv novog kanala.", true), new Opcija(OptionType.BOOLEAN, "isvoice", "Da li je kanal voice kanal?", true)),
-				new Komanda("obrisi_kanal", "Brisanje kanala", true, new Opcija(OptionType.CHANNEL, "kanal", "Naziv kanala za brisanje.", true)),
-				new Komanda("posalji_poruku", "Salje poruku glavnom developeru")
+		globalneKomande = new Komanda[] {
+			new Komanda("randomcat", "Salje sliku nasumicno izabrane macke.", false),
+			new Komanda("website", "Salje vam link do sajta za ShruggoBot-a.", false),
+			new Komanda("trenutnovreme", "Dobij formatirano vreme, kao i trenutno formatirano vreme.", false),
+			new Komanda("ping", "Komanda za odredivanje i ispisivanje latency-ja bota.", false),
+			new Komanda("info", "Komanda koja ispisuje osnovne informacije o botu.", false),
+			new Komanda("say", "Komanda za govor u vase ime od strane bota.", false, new Opcija(OptionType.STRING, "izjava", "Sta zelite da kaze u vase ime", true)),
+			new Komanda("analizaformule", "Komanda za ispisivanje formula za analizu.", false),
+			new Komanda("help", "Komanda za ispisivanje svih komandi bota.", false),
+			new Komanda("github", "Komanda za ispisivanje source-a ovog bota.", false),
+			new Komanda("korisni_linkovi", "Komanda za ispisivanje korisnih linkova za RA, E2, FTN.", false),	
+			new Komanda("nick", "Komanda za menjanje nickname-a korisnika.", false, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite promeniti ime?", true), new Opcija(OptionType.STRING, "novoime", "Novi nickname korisnika", true)),
+			new Komanda("purge", "Komanda za brisanje odredjenog broja poruka.", false, new Opcija(OptionType.INTEGER, "brojporuka", "Broj poruka za brisanje.", true), new Opcija(OptionType.CHANNEL, "kanal", "U kom kanalu zelite da brisete poruke?", false)),
+			new Komanda("bot_invite", "Komanda koja vraca invite link za bota.", false),
+			new Komanda("spamuj", "Komanda koja spamuje odredjenu poruku, odredjeni broj puta (obrise je posle).", false, new Opcija(OptionType.STRING, "poruka", "Ispisite poruku za spamovanje", true), new Opcija(OptionType.INTEGER, "brojporuka", "Broj poruka za spamovanje.", true)),
+			new Komanda("posalji_poruku", "Komanda za komunikaciju sa glavnim developerom.", false),
+			new Komanda("roast", "Komanda koja roast-uje korisnika.", false, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite roast-ovati?", true)),
+			new Komanda("glasanje", "Komanda za ostvarivanje glasanja.", false, new Opcija(OptionType.STRING, "naslov", "Naslov", true), new Opcija(OptionType.STRING, "poruka", "Poruka za glasanje", true), new Opcija(OptionType.INTEGER, "trajanje_sekunde", "Koliko sekundi zelite da ovo glasanje bude dugacko?", true)),
+			new Komanda("ban", "Komanda za banovanje korisnika sa servera.", true, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite da banujete?", true)),
+			new Komanda("kick", "Komanda za kickovanje korisnika sa servera.", true, new Opcija(OptionType.USER, "korisnik", "Kojeg korisnika zelite da kickujete?", true)),
+			new Komanda("timeout", "Komanda za stavljanje korisnika u timeout.", true, new Opcija(OptionType.USER, "korisnik", "Izaberite korisnika za stavljanje u timeout.", true)),
+			new Komanda("napravi_kanal", "Komanda za pravljenje novog kanala.", true, new Opcija(OptionType.STRING, "kanal", "Naziv novog kanala.", true), new Opcija(OptionType.BOOLEAN, "isvoice", "Da li je kanal voice kanal?", true)),
+			new Komanda("obrisi_kanal", "Komanda za brisanje vec postojeceg kanala.", true, new Opcija(OptionType.CHANNEL, "kanal", "Naziv kanala za brisanje.", true)),
+			new Komanda("unmute", "Komanda za unmutovanje korisnika sa servera.", true, new Opcija(OptionType.USER, "korisnik", "Korisnik kojega zelite unmutovati.", true)),
+			new Komanda("mute", "Komanda za mutovanje korisnika sa servera.", true, new Opcija(OptionType.USER, "korisnik", "Korisnik kojega zelite mutovati.", true)),
+			new Komanda("izadji", "Komanda koja izbacuje bota sa servera.", true)
 		};
-		
-		// DODAJ_KOMANDE_U_TEST_SERVER(jda.getGuildById("945790514605727755"), komande);
-		// DODAJ_KOMANDE_GLOBALNO(jda, komande);
 
-		JSONRespondPoruka.formatirajPorukeUJsonFajl(komande);
+		gengengKomande = new Komanda[]{
+			new Komanda("listaj_json_rp", "Ispisuje sve dodate respond poruke.", false),
+			new Komanda("obrisi_rp", "Brise respond poruku koja je izabrana.", false, new Opcija(OptionType.STRING, "trigger", "Trigger za poruku koja treba da se obrise", true)),
+			new Komanda("dodaj_rp", "Dodaje novu respond poruku.", false, new Opcija(OptionType.STRING, "trigger", "Trigger za pisanje respond poruke.", true), new Opcija(OptionType.STRING, "response", "Response za pisanje respond poruke.", true)),
+		};
+
+		privatneKomande = new Komanda[]{
+			new Komanda("posaljinoviupdate", "Posalji Novi Update", true),
+			new Komanda("posaljiglobalnoporuku_id", "Posalji poruku preko ID.", true, new Opcija(OptionType.STRING, "id", "ID poruke za slanje", true)),
+			new Komanda("shutdown", "Iskljucuje bota za odredjeno vreme", true),
+			new Komanda("bitno_obavestenje", "Bitno Obavestenje za sve servere", true, new Opcija(OptionType.STRING, "izjava", "Koju poruku zelite da posaljete?", true)),
+			new Komanda("napravi_roast", "Napravi novi roast .json fajl.", true)
+		};
+
+		JSONRespondPoruka.formatirajPorukeUJsonFajl(globalneKomande);
 		
 		Logger logger = LoggerFactory.getLogger(Main.class);
 		logger.info("Uspesno pokrenut bot.");
-	}
-
-	private static void DODAJ_KOMANDE_GLOBALNO(JDA jda2, Komanda[] komande) {
-
-		List<Komanda> listaKomandiZaNeDodavanje = new ArrayList<>();
-		List<Komanda> listaZaDodati = new ArrayList<>();
-
-		for(Command c : jda2.retrieveCommands().complete()) {
-			for(Komanda c1 : Arrays.asList(komande)) {
-				if(!c1.getNaziv().equals(c.getName())) {
-					continue;
-				} else {
-					listaKomandiZaNeDodavanje.add(c1);
-					break;
-				}
-			}
-		}
-
-		for(Komanda c : Arrays.asList(komande)) {
-			if(listaKomandiZaNeDodavanje.contains(c)) {
-				continue;
-			} else {
-				listaZaDodati.add(c);
-			}
-		}
-
-		for(Komanda c : listaZaDodati) {
-			c.dodajKomanduGlobalno(jda);
-			System.out.println("Dodata komanda `/" + c.getNaziv() + "` globalno.");
-		}
-	}
-
-	private static void DODAJ_KOMANDE_U_TEST_SERVER(Guild guildById, Komanda[] komande) {
-
-		List<Komanda> listaKomandiZaNeDodavanje = new ArrayList<>();
-		List<Komanda> listaZaDodati = new ArrayList<>();
-
-		for(Command c : guildById.retrieveCommands().complete()) {
-			for(Komanda c1 : Arrays.asList(komande)) {
-				if(!c1.getNaziv().equals(c.getName())) {
-					continue;
-				} else {
-					listaKomandiZaNeDodavanje.add(c1);
-					break;
-				}
-			}
-		}
-
-		for(Komanda c : Arrays.asList(komande)) {
-			if(listaKomandiZaNeDodavanje.contains(c)) {
-				continue;
-			} else {
-				listaZaDodati.add(c);
-			}
-		}
-
-		for(Komanda c : listaZaDodati) {
-			c.dodajKomanduGlobalno(jda);
-			System.out.println("Dodata komanda u server `" + guildById.getName() + "`, zvana `/" + c.getNaziv() + "`. (nije globalno).");
-		}
 	}
 }

@@ -25,7 +25,7 @@ public class DobrodoslicaKanaliPravljenje extends ListenerAdapter {
 	
 	@Override
 	public void onButtonInteraction(@NotNull ButtonInteractionEvent e) {
-		if(e.getButton().getId().equals("dobrodoslica")) {
+		if(e.getComponentId().equals("dobrodoslica")) {
 			e.getChannel().sendMessage("Kanal za dobrodoslicu ce biti napravljen.").queue(k -> k.delete().queueAfter(10, TimeUnit.SECONDS));
 			e.deferEdit().setActionRows(ActionRow.of(
 				e.getButton().asDisabled(),
@@ -36,7 +36,7 @@ public class DobrodoslicaKanaliPravljenje extends ListenerAdapter {
 			napraviDobrodoslicu = true;
 		}
 		
-		if(e.getButton().getId().equals("adminkanal")) {
+		if(e.getComponentId().equals("adminkanal")) {
 			e.getChannel().sendMessage("Kanal za admine ce biti napravljen.").queue(k -> k.delete().queueAfter(10, TimeUnit.SECONDS));
 			e.deferEdit().setActionRows(ActionRow.of(
 				e.getMessage().getButtonById("dobrodoslica"),
@@ -46,7 +46,7 @@ public class DobrodoslicaKanaliPravljenje extends ListenerAdapter {
 			napraviAdmin = true;
 		}
 	
-		if(e.getButton().getId().equals("zavrsi") || (e.getMessage().getButtonById("dobrodoslica").isDisabled() && e.getMessage().getButtonById("adminkanal").isDisabled())) {
+		if(e.getComponentId().equals("zavrsi")) {
 			e.deferEdit().setActionRows(ActionRow.of(
 				e.getMessage().getButtonById("dobrodoslica").asDisabled(),
 				e.getMessage().getButtonById("adminkanal").asDisabled(),
@@ -65,9 +65,8 @@ public class DobrodoslicaKanaliPravljenje extends ListenerAdapter {
 		if(napraviAdmin) {
 			NAPRAVI_KANAL_ZA_ADMINE(e);
 		}
-		
+
 		e.getMessage().editMessage(e.getMessage().getContentRaw()).setActionRows().queue();
-		e.getJDA().removeEventListener(this);
 		e.getMessage().delete().queueAfter(5, TimeUnit.SECONDS);
 	}
 

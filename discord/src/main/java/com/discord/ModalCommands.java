@@ -30,114 +30,156 @@ public class ModalCommands extends ListenerAdapter {
 		
 		this.event = event;
 		
-		if(event.getModalId().equals("tiket")) {
+		switch(event.getModalId()) {
+			case "tiket":
+				POSALJI_TIKET(event);
+			break;
+
+			case "banTiket":
+				POSALJI_BAN_TIKET(event);
+			break;
+
+			case "kickTiket":
+				POSALJI_KICK_TIKET(event);
+			break;
+
+			case "timeoutTiket":
+				POSALJI_TIMEOUT_TIKET(event);
+			break;
+
+			case "muteTiket":
+				POSALJI_MUTE_TIKET(event);
+			break;
+		}
+	}
+
+	private void POSALJI_MUTE_TIKET(ModalInteractionEvent event2) {
+		event.deferReply(true).queue();
+		InteractionHook hook = event.getHook();
+
+		String razlog = event.getValue("razlog").getAsString();
+
+		try {
+			String naziv = m.getEffectiveName();
 			
-			String naslov = event.getValue("naslov").getAsString();
-			String paragraf = event.getValue("paragraf").getAsString();
-			
-			posaljiSupportTiket(naslov, paragraf);
-		}
-
-		if(event.getModalId().equals("banTiket")) {
-
-			event.deferReply(true).queue();
-			InteractionHook hook = event.getHook();
-			hook.setEphemeral(true);
-
-			String razlog = event.getValue("razlog").getAsString();
-
-			try {
-				Integer vremeBrisanjaPoruka = Integer.parseInt(event.getValue("vreme").getAsString());
-					
-				String naziv = m.getEffectiveName();
+			m.deafen(true).queue();
 				
-				m.getUser().openPrivateChannel().queue(k -> {
-						k.sendMessage("Nazalost, dobili ste ban u serveru **" + event.getGuild().getName() + "**.").queue(
-							l -> {
-								m.ban(vremeBrisanjaPoruka, razlog).queueAfter(5, TimeUnit.SECONDS);
-							}
-						);
-						
-				});
+			m.getUser().openPrivateChannel().queue(k -> {
+				k.sendMessage("Nazalost, dobili ste mute u serveru **" + event.getGuild().getName() + "**.\nRazlog: " + razlog).queue();
+			});
 
-				hook.sendMessage("Uspesno banovan korisnik " + naziv + ".").queue();
-			} catch(InsufficientPermissionException e1) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
-				return;
-			} catch(HierarchyException e2) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
-				return;
-			} catch(IllegalArgumentException e3) {
-				hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
-				return;
-			} 
-		}
+			hook.sendMessage("Uspesno mutovan korisnik " + naziv + ".").queue();
+		} catch(InsufficientPermissionException e1) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
+			return;
+		} catch(HierarchyException e2) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
+			return;
+		} 
+	}
 
-		if(event.getModalId().equals("kickTiket")) {
+	private void POSALJI_TIMEOUT_TIKET(ModalInteractionEvent event2) {
+		event.deferReply(true).queue();
+		InteractionHook hook = event.getHook();
 
-			event.deferReply(true).queue();
-			InteractionHook hook = event.getHook();
-			hook.setEphemeral(true);
+		String razlog = event.getValue("razlog").getAsString();
 
-			String razlog = event.getValue("razlog").getAsString();
+		try {
+			Integer vreme = Integer.parseInt(event.getValue("vreme").getAsString()) * 60;		// U sekundama
 
-			try {
-				String naziv = m.getEffectiveName();
+			String naziv = m.getEffectiveName();
+
+			m.getUser().openPrivateChannel().queue(k -> {
+				k.sendMessage("Nazalost, dobili ste timeout u serveru **" + event.getGuild().getName() + "**.\nRazlog: " + razlog).queue(
+					l -> {
+						m.timeoutFor(vreme, TimeUnit.SECONDS).queueAfter(5, TimeUnit.SECONDS);
+					}
+				);
+			});
+
+			hook.sendMessage("Uspesno timeout-ovan korisnik " + naziv + ".").queue();
+		} catch(InsufficientPermissionException e1) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
+			return;
+		} catch(HierarchyException e2) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
+			return;
+		} catch(IllegalArgumentException e3) {
+			hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
+			return;
+		} 	
+	}
+
+	private void POSALJI_KICK_TIKET(ModalInteractionEvent event2) {
+		event.deferReply(true).queue();
+		InteractionHook hook = event.getHook();
+		hook.setEphemeral(true);
+
+		String razlog = event.getValue("razlog").getAsString();
+
+		try {
+			String naziv = m.getEffectiveName();
 				
-				m.getUser().openPrivateChannel().queue(k -> {
-						k.sendMessage("Nazalost, dobili ste kick u serveru **" + event.getGuild().getName() + "**.\nRazlog: " + razlog).queue(
-							l -> {
-								m.kick(razlog).queueAfter(5, TimeUnit.SECONDS);
-							}
-						);
-				});
-
-				hook.sendMessage("Uspesno kickovan korisnik " + naziv + ".").queue();
-			} catch(InsufficientPermissionException e1) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
-				return;
-			} catch(HierarchyException e2) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
-				return;
-			} catch(IllegalArgumentException e3) {
-				hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
-				return;
-			} 
-		}
-
-		if(event.getModalId().equals("timeoutTiket")) {
-
-			event.deferReply(true).queue();
-			InteractionHook hook = event.getHook();
-			hook.setEphemeral(true);
-
-			String razlog = event.getValue("razlog").getAsString();
-
-			try {
-				Integer vreme = Integer.parseInt(event.getValue("vreme").getAsString()) * 60;		// U sekundama
-
-				String naziv = m.getEffectiveName();
-
-				m.getUser().openPrivateChannel().queue(k -> {
-					k.sendMessage("Nazalost, dobili ste timeout u serveru **" + event.getGuild().getName() + "**.\nRazlog: " + razlog).queue(
+			m.getUser().openPrivateChannel().queue(k -> {
+					k.sendMessage("Nazalost, dobili ste kick u serveru **" + event.getGuild().getName() + "**.\nRazlog: " + razlog).queue(
 						l -> {
-							m.timeoutFor(vreme, TimeUnit.SECONDS).queueAfter(5, TimeUnit.SECONDS);
+							m.kick(razlog).queueAfter(5, TimeUnit.SECONDS);
 						}
 					);
-				});
+			});
 
-				hook.sendMessage("Uspesno timeout-ovan korisnik " + naziv + ".").queue();
-			} catch(InsufficientPermissionException e1) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
-				return;
-			} catch(HierarchyException e2) {
-				hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
-				return;
-			} catch(IllegalArgumentException e3) {
-				hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
-				return;
-			} 
-		}
+			hook.sendMessage("Uspesno kickovan korisnik " + naziv + ".").queue();
+		} catch(InsufficientPermissionException e1) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
+			return;
+		} catch(HierarchyException e2) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
+			return;
+		} catch(IllegalArgumentException e3) {
+			hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
+			return;
+		} 
+	}
+
+	private void POSALJI_BAN_TIKET(ModalInteractionEvent event2) {
+		event.deferReply(true).queue();
+		InteractionHook hook = event.getHook();
+		hook.setEphemeral(true);
+
+		String razlog = event.getValue("razlog").getAsString();
+
+		try {
+			Integer vremeBrisanjaPoruka = Integer.parseInt(event.getValue("vreme").getAsString());
+					
+			String naziv = m.getEffectiveName();
+				
+			m.getUser().openPrivateChannel().queue(k -> {
+					k.sendMessage("Nazalost, dobili ste ban u serveru **" + event.getGuild().getName() + "**.").queue(
+						l -> {
+							m.ban(vremeBrisanjaPoruka, razlog).queueAfter(5, TimeUnit.SECONDS);
+						}
+					);
+						
+			});
+
+			hook.sendMessage("Uspesno banovan korisnik " + naziv + ".").queue();
+		} catch(InsufficientPermissionException e1) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Bot nema permisiju za ovu akciju.").queue();
+			return;
+		} catch(HierarchyException e2) {
+			hook.sendMessage("Bot nema pravo ovo da uradi. Korisnik se nalazi iznad bota na skali permisija.").queue();
+			return;
+		} catch(IllegalArgumentException e3) {
+			hook.sendMessage("Bot nije u mogucnosti ovo da uradi. Mozda ste ukucali pogresnu vrednost nekog polja?").queue();
+			return;
+		} 
+	}
+
+	private void POSALJI_TIKET(ModalInteractionEvent event2) {
+		String naslov = event.getValue("naslov").getAsString();
+		String paragraf = event.getValue("paragraf").getAsString();
+			
+		posaljiSupportTiket(naslov, paragraf);
 	}
 
 	private void posaljiSupportTiket(String naslov, String paragraf) {
@@ -171,5 +213,4 @@ public class ModalCommands extends ListenerAdapter {
 		
 		jda.addEventListener(modalButtonClick);
 	}
-	
 }

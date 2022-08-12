@@ -49,8 +49,14 @@
           <artifactId>slf4j-simple</artifactId>
           <version>1.7.36</version>
       </dependency>
-  </dependencies>
 
+      <dependency>
+        <groupId>com.mashape.unirest</groupId>
+        <artifactId>unirest-java</artifactId>
+        <version>1.4.9</version>
+    </dependency>
+  </dependencies>
+  
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>

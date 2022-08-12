@@ -78,6 +78,7 @@ public class JSONRespondPoruka {
     }
 
     public static void formatirajPorukeUJsonFajl(Komanda[] komande) {
+
         Gson gson = new GsonBuilder()
 						.disableHtmlEscaping()
 						.setFieldNamingStrategy(FieldNamingPolicy.UPPER_CAMEL_CASE)
@@ -88,7 +89,10 @@ public class JSONRespondPoruka {
 			try (FileWriter file = new FileWriter(new File(new File("jsonFolder"), "komande.json"))) {
 
 				String jsonString = gson.toJson(komande);
-				file.write(jsonString);
+
+                
+
+				file.append(jsonString);
 				file.close();
 
                 Logger logger = LoggerFactory.getLogger(JSONRespondPoruka.class);

@@ -66,6 +66,7 @@ public class ButtonClick extends ListenerAdapter {
 			embedZaPostavljanje.setDescription(aktivniEmbed.getDescription());
 			embedZaPostavljanje.setColor(Color.blue);
 			embedZaPostavljanje.setFooter(aktivniEmbed.getFooter().getText());
+			embedZaPostavljanje.setThumbnail(aktivniEmbed.getThumbnail().getUrl());
 			
 			int brojac = 0;
 			

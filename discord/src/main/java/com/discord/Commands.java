@@ -27,6 +27,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -84,9 +85,10 @@ public class Commands extends ListenerAdapter {
 					int number = (int) (Math.random() * 100);
 
 					if(number < 33) {
-						System.out.println(number);
 						event.getChannel().sendTyping().queue();
-						event.getChannel().sendMessage(p.getRespondPoruka().getResponseLatinica()).queue(k -> k.delete().queueAfter(10, TimeUnit.SECONDS));
+						event.getChannel().sendMessage(p.getRespondPoruka().getResponseLatinica()).queue(k -> {
+							k.addReaction(Emoji.fromUnicode("U+1F4A3")).queue();
+						});
 		
 						Cooldowns.UKLJUCI_COOLDOWN_RESPONSE(Cooldowns.cooldown_brojno_respond_poruke);
 						return;
@@ -113,23 +115,15 @@ public class Commands extends ListenerAdapter {
 			case prefix + "create_welcome":
 				CREATE_WELCOME_KOMANDA(event, niz_reci);
 			break;
-			
-			case prefix + "kalendar_ispita":
-				KALENDAR_ISPITA_KOMANDA(event, niz_reci);
-			break;
-			
-			case prefix + "dodaj_respondporuku":
-				DODAJ_RESPONDPORUKU_KOMANDA(event, niz_reci);
-			break;
-			
-			case prefix + "listaj_respondporuke":
-				LISTAJ_RESPONDPORUKE_KOMANDA(event, niz_reci);
-			break;
 
-			case prefix + "obrisi_bot_rp":
-				OBRISI_BOT_RESPONDPORUKE(event, niz_reci);
+			case prefix + "updateslash":
+				if(niz_reci.length == 1) {
+					Komanda.DODAJ_KOMANDE_GLOBALNO(event.getJDA(), Main.globalneKomande);
+					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("945790514605727755"), Main.privatneKomande);	// privatne specijalne komande
+				} else if(niz_reci[1].equals("genggeng")) {
+					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("931636632992497684"), Main.gengengKomande);	// genggeng specijalne komande
+				}
 			break;
-	    
 		}
 	}
 
@@ -548,8 +542,16 @@ public class Commands extends ListenerAdapter {
 	
 	
 	public static void BOT_INVITE_KOMANDA(MessageReceivedEvent event, String[] poruka) {
-			event.getChannel().sendMessage("Mozete invite-ovati bota putem ovog linka: https://discord.com/api/oauth2/authorize?client_id=706482474200334366&permissions=8&scope=bot")
-			.queue();
+		EmbedBuilder eb = new EmbedBuilder();
+		
+		eb.setTitle("**INVITE BOTA**");
+		eb.setColor(Color.CYAN);
+		
+		eb.addField("LINK ZA INVITE", "https://bit.ly/shruggo", false);
+		
+		eb.setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Info_icon_002.svg/1200px-Info_icon_002.svg.png");
+		
+		event.getChannel().sendMessageEmbeds(eb.build()).queue();
 	}
 	
 	
