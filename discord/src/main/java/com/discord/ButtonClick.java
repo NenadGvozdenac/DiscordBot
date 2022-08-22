@@ -90,6 +90,7 @@ public class ButtonClick extends ListenerAdapter {
 			InteractionHook hook = e.getHook();
 			hook.setEphemeral(true);
 			
+			
 			hook.sendMessage("Niste u mogucnosti ponovo glasati. Vec ste glasali jednom!").queue();
 		}
 	}
