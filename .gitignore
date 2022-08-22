@@ -1,0 +1,6 @@
+.vscode
+test
+target
+jsonFolder/token.json
+jsonFolder/respondPoruke.json
+jsonFolder/roasts.json

@@ -1,0 +1,279 @@
+[
+  {
+    "Naziv": "randomcat",
+    "Deskripcija": "Salje sliku nasumicno izabrane macke.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "website",
+    "Deskripcija": "Salje vam link do sajta za ShruggoBot-a.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "trenutnovreme",
+    "Deskripcija": "Dobij formatirano vreme, kao i trenutno formatirano vreme.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "ping",
+    "Deskripcija": "Komanda za odredivanje i ispisivanje latency-ja bota.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "info",
+    "Deskripcija": "Komanda koja ispisuje osnovne informacije o botu.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "say",
+    "Deskripcija": "Komanda za govor u vase ime od strane bota.",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "izjava",
+        "OptionTypeDesc": "Sta zelite da kaze u vase ime",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "analizaformule",
+    "Deskripcija": "Komanda za ispisivanje formula za analizu.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "help",
+    "Deskripcija": "Komanda za ispisivanje svih komandi bota.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "github",
+    "Deskripcija": "Komanda za ispisivanje source-a ovog bota.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "korisni_linkovi",
+    "Deskripcija": "Komanda za ispisivanje korisnih linkova za RA, E2, FTN.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "nick",
+    "Deskripcija": "Komanda za menjanje nickname-a korisnika.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite promeniti ime?",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "novoime",
+        "OptionTypeDesc": "Novi nickname korisnika",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "purge",
+    "Deskripcija": "Komanda za brisanje odredjenog broja poruka.",
+    "Opcija": [
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "brojporuka",
+        "OptionTypeDesc": "Broj poruka za brisanje.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "CHANNEL",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "U kom kanalu zelite da brisete poruke?",
+        "ObaveznaOpcija": false
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "bot_invite",
+    "Deskripcija": "Komanda koja vraca invite link za bota.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "spamuj",
+    "Deskripcija": "Komanda koja spamuje odredjenu poruku, odredjeni broj puta (obrise je posle).",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "poruka",
+        "OptionTypeDesc": "Ispisite poruku za spamovanje",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "brojporuka",
+        "OptionTypeDesc": "Broj poruka za spamovanje.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "posalji_poruku",
+    "Deskripcija": "Komanda za komunikaciju sa glavnim developerom.",
+    "Opcija": [],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "roast",
+    "Deskripcija": "Komanda koja roast-uje korisnika.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite roast-ovati?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "glasanje",
+    "Deskripcija": "Komanda za ostvarivanje glasanja.",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "naslov",
+        "OptionTypeDesc": "Naslov",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "poruka",
+        "OptionTypeDesc": "Poruka za glasanje",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "INTEGER",
+        "OptionTypeName": "trajanje_sekunde",
+        "OptionTypeDesc": "Koliko sekundi zelite da ovo glasanje bude dugacko?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
+    "Naziv": "ban",
+    "Deskripcija": "Komanda za banovanje korisnika sa servera.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite da banujete?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "kick",
+    "Deskripcija": "Komanda za kickovanje korisnika sa servera.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Kojeg korisnika zelite da kickujete?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "timeout",
+    "Deskripcija": "Komanda za stavljanje korisnika u timeout.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Izaberite korisnika za stavljanje u timeout.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "napravi_kanal",
+    "Deskripcija": "Komanda za pravljenje novog kanala.",
+    "Opcija": [
+      {
+        "OptionType": "STRING",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "Naziv novog kanala.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "BOOLEAN",
+        "OptionTypeName": "isvoice",
+        "OptionTypeDesc": "Da li je kanal voice kanal?",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "obrisi_kanal",
+    "Deskripcija": "Komanda za brisanje vec postojeceg kanala.",
+    "Opcija": [
+      {
+        "OptionType": "CHANNEL",
+        "OptionTypeName": "kanal",
+        "OptionTypeDesc": "Naziv kanala za brisanje.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "unmute",
+    "Deskripcija": "Komanda za unmutovanje korisnika sa servera.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Korisnik kojega zelite unmutovati.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "mute",
+    "Deskripcija": "Komanda za mutovanje korisnika sa servera.",
+    "Opcija": [
+      {
+        "OptionType": "USER",
+        "OptionTypeName": "korisnik",
+        "OptionTypeDesc": "Korisnik kojega zelite mutovati.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": true
+  },
+  {
+    "Naziv": "izadji",
+    "Deskripcija": "Komanda koja izbacuje bota sa servera.",
+    "Opcija": [],
+    "AdminOnly": true
+  }
+]
