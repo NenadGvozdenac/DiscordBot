@@ -135,11 +135,12 @@ public class Main {
 			public String[] messages = {
 					"https://bit.ly/shruggo",
 					"Sada sa slash komandama!",
-					"Novi updejt!",
+					"v 23.08",
 					"Novi sajt!",
 					"/help",
 					"Koristi / za komande",
-					"by NenadG"
+					"by NenadG",
+					"Novi placeni hosting!"
 			};	
 			
 			@Override
