@@ -644,7 +644,10 @@ public class SlashCommands extends ListenerAdapter {
 					.withEmoji(Emoji.fromUnicode("\uD83D\uDCD3")),
 				SelectOption.of("Integrali", "integrali")
 					.withDescription("Formule za integrale")
-					.withEmoji(Emoji.fromUnicode("\uD83D\uDCD0"))
+					.withEmoji(Emoji.fromUnicode("\uD83D\uDCD0")),
+				SelectOption.of("Redovi", "redovi")
+                    .withDescription("Formule za redove")
+                    .withEmoji(Emoji.fromUnicode("\uD83D\uDCC9"))
 			).build();
 
 		event.reply("Izaberite koje formule zelite: ")
