@@ -1,0 +1,8 @@
+target/classes
+target/test-classes
+data
+jsonFolder/token.json
+jsonFolder/respondPoruke.json
+jsonFolder/roasts.json
+test
+generated-sources
