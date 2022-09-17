@@ -86,6 +86,37 @@
     "AdminOnly": false
   },
   {
+    "Naziv": "algebra",
+    "Deskripcija": "Komanda za odredjivanje ocene iz algebre.",
+    "Opcija": [
+      {
+        "OptionType": "NUMBER",
+        "OptionTypeName": "bodovi1",
+        "OptionTypeDesc": "Unesite broj bodova prvog dela.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "NUMBER",
+        "OptionTypeName": "bodovi2",
+        "OptionTypeDesc": "Unesite broj bodova drugog dela.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "NUMBER",
+        "OptionTypeName": "bodovi3",
+        "OptionTypeDesc": "Unesite broj bodova treceg dela.",
+        "ObaveznaOpcija": true
+      },
+      {
+        "OptionType": "NUMBER",
+        "OptionTypeName": "bodovi4",
+        "OptionTypeDesc": "Unesite broj bodova cetvrtog dela.",
+        "ObaveznaOpcija": true
+      }
+    ],
+    "AdminOnly": false
+  },
+  {
     "Naziv": "purge",
     "Deskripcija": "Komanda za brisanje odredjenog broja poruka.",
     "Opcija": [

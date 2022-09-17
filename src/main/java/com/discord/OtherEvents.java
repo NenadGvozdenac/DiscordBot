@@ -220,10 +220,10 @@ public class OtherEvents extends ListenerAdapter {
 							
 							if(dob.napraviAdmin == false && dob.napraviDobrodoslicu == false && dob.zavrsi == false) {
 								k.editMessage("Niste pritisnuli na vreme ni jedno dugme. Prestanak radnje").queue(m -> m.delete().queueAfter(15, TimeUnit.SECONDS));
-								Main.jda.removeEventListener(dob);
+								DiscordBot.jda.removeEventListener(dob);
 							} else {
 								dob.NAPRAVI_KANALE();
-								Main.jda.removeEventListener(dob);
+								DiscordBot.jda.removeEventListener(dob);
 							}
 							
 							this.cancel();

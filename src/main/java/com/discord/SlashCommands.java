@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -232,6 +233,10 @@ public class SlashCommands extends ListenerAdapter {
 				// ISKLJUCENA_KOMANDA_ODGOVORI(event);
 			break;
 
+			case "algebra":
+				ALGEBRA_OCENA(event);
+			break;
+
 			case "randomcat":
 				RANDOM_CAT_KOMANDA(event);
 				// ISKLJUCENA_KOMANDA_ODGOVORI(event);
@@ -244,6 +249,32 @@ public class SlashCommands extends ListenerAdapter {
 				hook.sendMessage("Ne mogu vam to sada uraditi...").queue();
 		}
     }
+
+	private void ALGEBRA_OCENA(@NotNull SlashCommandInteractionEvent event) {
+
+		event.deferReply(false).queue();
+
+		Double bodovi1 = event.getOption("bodovi1").getAsDouble();
+		Double bodovi2 = event.getOption("bodovi2").getAsDouble();
+		Double bodovi3 = event.getOption("bodovi3").getAsDouble();
+		Double bodovi4 = event.getOption("bodovi4").getAsDouble();
+
+		if(bodovi1 < 45 || bodovi1 > 100 | bodovi2 < 45 || bodovi2 > 100 || bodovi3 < 45 || bodovi3 > 100 | bodovi4 < 45 || bodovi4 > 100) {
+			event.getHook().sendMessage("`Pogresan unos... Broj bodova moze biti samo broj izmedju 45 i 100...`").queue();
+			return;
+		}
+
+		Double prosek = (bodovi1 + bodovi2 + bodovi3 + bodovi4) / 4 * 49 / 60f;
+
+		prosek += 55 / 3;
+
+		Double ocena = prosek / 10;
+
+		DecimalFormat ocenaFormater = new DecimalFormat("##");
+		DecimalFormat brojBodovaFormater = new DecimalFormat("##.##");
+
+		event.getHook().sendMessage("Broj bodova: " + brojBodovaFormater.format(prosek) + ((prosek <= 50) ? "! Niste jos polozili." : "! Ocena: " + ocenaFormater.format(ocena))).queue();
+	}
 
 	private void LOGUJ_KOMANDU(@NotNull SlashCommandInteractionEvent event, MessageChannelUnion channel, Guild guild, Member member, String commandString) {
 		EmbedBuilder eb = new EmbedBuilder();
@@ -1066,7 +1097,7 @@ public class SlashCommands extends ListenerAdapter {
 			
 			EmbedBuilder pingRespond = new EmbedBuilder();
 			pingRespond.addField("\uD83E\uDD16 BOT PING \uD83E\uDD16", String.valueOf((end - start)) + " ms.", true);
-			pingRespond.addField("\uD83E\uDD16 WEBSOCKET PING \uD83E\uDD16", String.valueOf(Main.jda.getGatewayPing()) + " ms.", true);
+			pingRespond.addField("\uD83E\uDD16 WEBSOCKET PING \uD83E\uDD16", String.valueOf(DiscordBot.jda.getGatewayPing()) + " ms.", true);
 
 			k.editMessage(k.getContentRaw()).setEmbeds(pingRespond.build()).queue();
 		});

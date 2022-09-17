@@ -118,10 +118,10 @@ public class Commands extends ListenerAdapter {
 
 			case prefix + "updateslash":
 				if(niz_reci.length == 1) {
-					Komanda.DODAJ_KOMANDE_GLOBALNO(event.getJDA(), Main.globalneKomande);
-					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("945790514605727755"), Main.privatneKomande);	// privatne specijalne komande
+					Komanda.DODAJ_KOMANDE_GLOBALNO(event.getJDA(), DiscordBot.globalneKomande);
+					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("945790514605727755"), DiscordBot.privatneKomande);	// privatne specijalne komande
 				} else if(niz_reci[1].equals("genggeng")) {
-					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("931636632992497684"), Main.gengengKomande);	// genggeng specijalne komande
+					Komanda.DODAJ_KOMANDE_U_SERVER(event.getJDA().getGuildById("931636632992497684"), DiscordBot.gengengKomande);	// genggeng specijalne komande
 				}
 			break;
 		}

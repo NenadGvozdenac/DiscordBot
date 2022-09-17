@@ -108,7 +108,7 @@ public class Cooldowns {
 
 			@Override
 			public void run() {
-				Main.jda.shutdown();
+				DiscordBot.jda.shutdown();
 				System.exit(0);
 			}
 			

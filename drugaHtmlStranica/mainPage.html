@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+        <title> Bootstrap | Information </title>
+        <link rel="icon" type="image/x-icon" href="slike/bootstrapLogo.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="mainPageStyle.css">
+    </head>
+
+    <body>
+
+        <!-- NAV BAR -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light sticky-top" id="navbar">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">
+                    <img id="logo-img-navbar" src="slike/bootstrapLogo.png" width="50" height="50">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" type="button" id="aboutBootstrap" href="#about-bootstrap">About Bootstrap</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#what-to-expect">What to expect</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#installation">Installation</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#css-variables">Css Variables</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#footer">Contact</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- CAROUSEL -->
+        <div id="carouselPlace">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-xs-12 bm-3">
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                          <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner text-center">
+                            <div class="carousel-item active">
+                                <img src="slike/firstSlide.png" class="d-block w-100">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <p>Powerful, extensible, and feature-packed frontend toolkit. Bring projects to life with powerful JavaScript plugins.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="slike/secondSlide.png" class="d-block w-100">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h2>Bootstrap 5</h2>
+                                    <p>Build fast, responsive sites with Bootstrap!</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="slike/thirdSlide.png" class="d-block w-100">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="slike/fifthSlide.jpg" class="d-block w-100">
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                      </div>
+                </div>
+                </div>
+            </div>
+        </div>
+           
+        <hr>
+
+        <!-- ABOUT BOOTSTRAP -->
+        <div id="about-bootstrap">
+            <div class="text-center" id="text-h1">
+                <h1>About Boostrap</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-sm-12" id="column-about-bootstrap-1">
+                    <h2>History</h2>
+                    <p>Originally created by a designer and a developer at Twitter, Bootstrap has become one of the most popular front-end frameworks and open source projects in the world.
+                        Bootstrap was created at Twitter in mid-2010 by @mdo and @fat. Prior to being an open-sourced framework, Bootstrap was known as Twitter Blueprint. A few months into development, Twitter held its first Hack Week and the project exploded as developers of all skill levels jumped in without any external guidance. It served as the style guide for internal tools development at the company for over a year before its public release, and continues to do so today.
+                        Originally released on Friday, August 19, 2011, we've since had over twenty releases, including two major rewrites with v2 and v3. With Bootstrap 2, we added responsive functionality to the entire framework as an optional stylesheet. Building on that with Bootstrap 3, we rewrote the library once more to make it responsive by default with a mobile first approach.
+                        With Bootstrap 4, we once again rewrote the project to account for two key architectural changes: a migration to Sass and the move to CSS's flexbox. Our intention is to help in a small way to move the web development community forward by pushing for newer CSS properties, fewer dependencies, and new technologies across more modern browsers.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-sm-12" id="column-about-bootstrap-2">
+                    <h2>Team</h2>
+                    <p>
+                        Bootstrap is maintained by a small team of developers on GitHub. We're actively looking to grow this team and would love to hear from you if you're excited about CSS at scale, writing and maintaining vanilla JavaScript plugins, and improving build tooling processes for frontend code.
+                    </p>
+                </div>
+                <div class="col-lg-3 col-sm-6 mx-auto" id="column-with-image">
+                    <img src="slike/croppedBootstrapLogo.png">
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="what-to-expect">
+            <div class="text-center" id="text-h1">
+                <h1>What to expect?</h1>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        About
+                    </h2>
+                    <p>
+                        In the last few years, Bootstrap has become very popular. There is a good chance that you have come across or created WordPress themes that incorporate Bootstrap elements. It has evolved from a basic pre-responsive framework to a robust, feature-rich, and modern responsive framework. Bootstrap 3 has been around for quite awhile, so it's exciting to learn about what is coming next in Bootstrap 4.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        State of Bootstrap 4
+                    </h2>
+                    <p>
+                        Bootstrap 4 is currently in the works and not quite yet ready to be used in production. Currently it's in alpha version. This is a good opportunity to preview and become familiar with how it will help you with future projects.
+                        <br>
+                        The documentation for Bootstrap 4 is not complete just yet, so experimentation is a good way to test out some of the new features. Once it is officially available for production use, you will be well aware of all the great new improvements.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        Built for modern browsers
+                    </h2>
+                    <p>
+                        As we move ahead on the web, it is getting harder and harder to support older browsers while using the latest and greatest of what web development has to offer. Whether or not this is music to your ears, we can all agree that better CSS3 techniques are made easier when working with modern browsers. Bootstrap 4 might just be the perfect way to make a clean break from older browsers. With this update, Internet Explorer 8 support is completely dropped. Keep in mind that the framework still supports Internet Explorer 9 and still supports CSS3 without many issues.    
+                    </p>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        Improved Reset
+                    </h2>
+                    <p>
+                        You've probably become accustom to Normalize.css, which is a great reset option. There is a new and improved reset with Bootstrap specific things added to it called reboot.css. Bootstrap specifics are things like the box-sizing: border, rems as the unit of measurement, link styles, and form styles. It's a great mix between Normalize.css and specific Bootstrap needs, so you are sure to be off to a great start.    
+                    </p>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        SASS
+                    </h2>
+                    <p>
+                        In the previous days of Bootstrap, it seemed that LESS was preferred. With industry changes and designer preferences leaning toward SASS, it is what is in current favor. If you remember back to Version 3, that is when the SASS option became available with the port option. As of right now, there isn't planned support for LESS.    
+                    </p>
+                </div>
+
+                <div class="col-lg-6 col-sm-12" id="column-what-to-expect">
+                    <h2>
+                        Customizations
+                    </h2>
+                    <p>
+                        Bootstrap 4 makes it easy to create your custom designs, all done in an organized way. All variable options are consolidated into a single file. SASS can be compiled easily and there is no need for a separate style sheet, like there has been in the past.    
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="installation">
+            <div class="text-center" id="text-h1">
+                <h1>Installation!</h1>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12" id="column-installation">
+                    <div class="card 80 mx-auto">
+                      <img src="slike/fourthImageInstallation.png" class="card-img-top">
+                      <div class="card-body">
+                        <h5 class="card-title">npm</h5>
+                        <p class="card-text">- Install Bootstrap in your Node.js powered apps with the <a href="https://www.npmjs.com/package/bootstrap">npm package</a>! <br>
+                        </p>
+                        <p class="card-text-code">$ npm install bootstrap</p>
+                        <p class="card-text-code" style="color:red;">
+                            const bootstrap = require('bootstrap')
+                        </p>
+                        <p class="card-text">
+                            - Import bootstrap from 'bootstrap' will load all of Bootstrap's plugins onto a bootstrap object. <br>The bootstrap module itself exports all of our plugins.
+                        </p>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12" id="column-installation">
+                    <div class="card 80 mx-auto">
+                      <img src="slike/firstImageInstallation.jpg" class="card-img-top">
+                      <div class="card-body">
+                        <h5 class="card-title">Compiled CSS and JS</h5>
+                        <p class="card-text">- Download ready-to-use compiled code for Bootstrap v5.0.2 to easily drop into your project, which includes:<br>
+                            - Compiled and minified <a href="https://getbootstrap.com/docs/5.0/getting-started/contents/#css-files"> CSS bundles </a>.<br>
+                            - Compiled and minified <a href="https://getbootstrap.com/docs/5.0/getting-started/contents/#js-files"> JavaScript plugins</a>.<br>
+                            - This doesn't include documentation, source files, or any optional JavaScript dependencies like Popper.
+                        </p>
+                        <button type="button" class="btn btn-outline-primary">Download</button>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12" id="column-installation">
+                    <div class="card 80 mx-auto">
+                      <img src="slike/secondImageInstallation.png" class="card-img-top">
+                      <div class="card-body">
+                        <h5 class="card-title">CDN via jsDelivr</h5>
+                        <p class="card-text">- Skip the download with jsDelivr to deliver cached version of Bootstrap's compiled CSS and JS to your project.
+                        <p class="card-text-code">
+                            <div class="scrollmenu">
+                                <code>&lt;link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous"&gt;</code> <br> 
+                                <code>&lt;script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"&gt;&lt;/script&gt;</code>     
+                            </div>
+                        </p>
+                        <p class="card-text">
+                            - If you're using our compiled JavaScript and prefer to include Popper separately, add Popper before our JS
+                        </p>
+                        </p>
+                      </div>
+                    </div>
+                </div>
+                
+                <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12" id="column-installation">
+                    <div class="card 80 mx-auto">
+                      <img src="slike/fourthImageInstallation.jpg" class="card-img-top">
+                      <div class="card-body">
+                        <h5 class="card-title">yarn & ruby</h5>
+                        <p class="card-text">- Install Bootstrap in your Node.js powered apps with the <a href="https://classic.yarnpkg.com/en/package/bootstrap">yarn package</a>!</p>
+                        <p class="card-text-code">$ yarn add bootstrap</p>
+                        <p class="card-text">- Install Bootstrap in your Ruby apps using Bundler (recommended) and RubyGems by adding the following line to your Gemfile:</p>
+                        <p class="card-text-code">
+                            gem 'bootstrap', '~> 5.0.2'
+                        </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div id="css-variables">
+            <div class="text-center" id="text-h1">
+                <h1>Build in real time with <i class="bi bi-filetype-css"></i> variables</h1>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-lg-6 col-sm-12 mx-auto" id="text-h5">
+                    <h5>Bootstrap 5 is evolving with each release to better utilize CSS variables for global theme styles, individual components, and even utilities. We provide dozens of variables for colors, font styles, and more at a :root level for use anywhere. On components and utilities, CSS variables are scoped to the relevant class and can easily be modified.
+                    </h5>
+                </div>
+            </div>
+
+            <div class="row text-center">
+                <div class="col-lg-5 col-sm-12 mx-auto" id="css-variables-col">
+                    <h4>
+                        Using CSS variables
+                    </h4>
+                    <p id="css-variables-text-below-h4">
+                        Use any of our global <a href="https://getbootstrap.com/docs/5.2/customize/css-variables/#root-variables">:root variables</a> to write new styles. <br> CSS variables use the <code>var(--bs-variableName)</code> syntax and can be inherited by children elements.
+                    </p>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 mx-auto">
+                            <code><p id="css-variables-text-code">
+                                .component {                                <br>
+                                    color: var(--bs-gray-800);              <br>
+                                    background-color: var(--bs-gray-100);   <br>
+                                    border: 1px solid var(--bs-gray-200);   <br>
+                                    border-radius: .25rem;                  <br>
+                                }                                           <br>
+                                                                            <br>
+                                .component-header {                         <br>
+                                    color: var(--bs-purple);                <br>
+                                }
+                            </p>
+                        </code>
+                        </div>
+                    </div> 
+                </div>
+                <div class="col-lg-5 col-sm-12 mx-auto" id="css-variables-col">
+                    <h4>
+                        Customizing via CSS variables
+                    </h4>
+                    <p id="css-variables-text-below-h4">
+                        Override global, component, or utility class variables to customize Bootstrap just how you like. No need to redeclare each rule, just a new variable value.
+                    </p>
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-12 mx-auto">
+                            <code><p id="css-variables-text-code">
+                                body {  <br>
+                                    --bs-body-font-family: var(--bs-font-monospace);<br>
+                                    --bs-body-line-height: 1.4;<br>
+                                    --bs-body-bg: var(--bs-gray-100);<br>
+                                }<br>
+                                <br>
+                                .table {<br>
+                                    --bs-table-color: var(--bs-gray-600);<br>
+                                    --bs-table-bg: var(--bs-gray-100);<br>
+                                    --bs-table-border-color: transparent;<br>
+                                }
+                            </p>
+                        </code>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+    <!-- Footer -->
+    <footer class="text-center text-lg-start bg-light text-muted" id="footer">
+        <!-- Section: Social media -->
+        <section class="d-flex justify-content-center justify-content-lg-between p-4 border-bottom">
+        <!-- Left -->
+        <div class="me-5 d-none d-lg-block">
+            <span>Get connected with us on social networks:</span>
+        </div>
+        <!-- Left -->
+  
+        <!-- Right -->
+        <div>
+            <a href="https://www.facebook.com/profile.php?id=100004129725098" class="me-4 text-reset">
+                <i class="bi bi-facebook"></i>
+            </a>
+            <a href="https://www.instagram.com/nenadgvozdenac/" class="me-4 text-reset">
+                <i class="bi bi-instagram"></i>
+            </a>
+            <a href="https://github.com/NenadGvozdenac" class="me-4 text-reset">
+                <i class="bi bi-github"></i>
+            </a>
+        </div>
+        <!-- Right -->
+        </section>
+        <!-- Section: Social media -->
+  
+        <!-- Section: Links  -->
+        <section class="">
+        <div class="container text-center text-md-start mt-5">
+            <!-- Grid row -->
+            <div class="row mt-3">
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+                <!-- Content -->
+                <h6 class="text-uppercase fw-bold mb-4">
+                    <i class="bi bi-building"></i> Website
+                </h6>
+                <p style="text-align:justify;">
+                    This website was used to showcase the power of bootstrap. It does not refer the original in any way, shape or form. It is used entirely for practice and nothing else.
+                    All rights, terms of use, entirely are pledged to the owner of the website.
+                </p>
+            </div>
+            <!-- Grid column -->
+    
+            <!-- Grid column -->
+            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
+                <!-- Links -->
+                <h6 class="text-uppercase fw-bold mb-4">
+                Useful links
+                </h6>
+                <p>
+                <a href="https://getbootstrap.com/" class="text-reset">Bootstrap Original Website</a>
+                </p>
+                <p>
+                <a href="https://icons.getbootstrap.com/" class="text-reset">Bootstrap Icons</a>
+                </p>
+                <p>
+                <a href="https://getbootstrap.com/docs/5.2/examples/" class="text-reset">Bootstrap Examples</a>
+                </p>
+                <p>
+                <a href="https://blog.getbootstrap.com/" class="text-reset">Bootstrap Blogpost</a>
+                </p>
+            </div>
+            <!-- Grid column -->
+    
+            <!-- Grid column -->
+            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
+                <!-- Links -->
+                <h6 class="text-uppercase fw-bold mb-4">Contact</h6>
+                <p><i class="bi bi-house"></i> Novi Sad, Serbia</p>
+                <p>
+                    <i class="bi bi-envelope"></i> nenadgvozdenacsrb@gmail.com
+                </p>
+                <p><i class="bi bi-telephone"></i> +381 65 3 450 826</p>
+                <p><i class="bi bi-telephone"></i> +381 65 8 450 826</p>
+            </div>
+            <!-- Grid column -->
+            </div>
+            <!-- Grid row -->
+        </div>
+        </section>
+        <!-- Section: Links  -->
+    
+        <!-- Copyright -->
+        <div class="text-center p-4" style="background-color: rgba(0, 0, 0, 0.05);">
+        © 2022 Copyright: NENAD GVOZDENAC
+        </div>
+        <!-- Copyright -->
+    </footer>
+  <!-- Footer -->
+
+        <script src="scrollbarHideNav.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+        
+        <script src="navbarScrollToDiv.js"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+    </body>
+</html>

@@ -15,8 +15,8 @@ public class Notifications extends ListenerAdapter {
 
 	public void onMessageReceived(MessageReceivedEvent event) {
 		
-		server_originalni = Main.jda.getGuildById(945790514605727755L);
-		server_za_slanje = Main.jda.getGuildById(931636632992497684L);
+		server_originalni = DiscordBot.jda.getGuildById(945790514605727755L);
+		server_za_slanje = DiscordBot.jda.getGuildById(931636632992497684L);
 		
 		if(event.getMessage().getContentRaw().equals("!napravi_notifikacije_kanal")) {
 			EnumSet<Permission> permissions = EnumSet.of(Permission.MESSAGE_SEND);
